@@ -23,7 +23,7 @@ export default function App(){
   const [patterns,setPatterns]=useState(null),[error,setError]=useState('');
   useEffect(()=>{const controller=new AbortController();fetch('/patterns.json',{signal:controller.signal}).then(r=>{if(!r.ok)throw new Error('Could not load the learning content. Restart npm run dev and reload.');return r.json();}).then(setPatterns).catch(e=>{if(e.name!=='AbortError')setError(e.message);});return()=>controller.abort();},[]);
   if(error)return <main><h1>Content could not load</h1><p>{error}</p></main>;
-  if(!patterns)return <main><div className="eyebrow">PATTERN ATLAS</div><h1>Opening your field guide…</h1></main>;
+  if(!patterns)return <main><div className="eyebrow">PATTERNPAL</div><h1>Opening your field guide…</h1></main>;
   return <Workspace patterns={patterns}/>;
 }
 
@@ -65,7 +65,7 @@ function Workspace({patterns}) {
   }
   return <>
     <a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
-    <aside className="sidebar"><a className="brand" href="#library"><span className="brand-mark">✳</span><span>pattern<span className="brand-light">atlas</span><small>YOUR ALGORITHM FIELD GUIDE</small></span></a>
+    <aside className="sidebar"><a className="brand" href="#library"><span className="brand-mark">✳</span><span>pattern<span className="brand-light">pal</span><small>YOUR ALGORITHM SIDEKICK</small></span></a>
       <div className="sidebar-label">STUDY WORKSPACE</div><nav aria-label="Main navigation">{navigation.map(([route, icon, label]) => <a href={`#${route}`} className={active === route ? 'active' : ''} aria-current={active === route ? 'page' : undefined} key={route}><span>{icon}</span>{label}{route === 'library' && <i>{patterns.length}</i>}{route === 'sql' && <i>25</i>}</a>)}</nav>
       <div className="sidebar-bottom"><div className="journey-head">Your learning journey <span>{progress.learned.length} / {patterns.length}</span></div><div className="progress-track" role="progressbar" aria-label="Methods learned" aria-valuemin={0} aria-valuemax={patterns.length} aria-valuenow={progress.learned.length}><div style={{ width: `${progress.learned.length / patterns.length * 100}%` }} /></div><a href="#resources" className="resource-link">↗ Guides & resources</a><div className="local-note">◌ {storageAvailable ? 'Progress saved on this device' : 'Progress kept for this session'}</div></div>
     </aside>
