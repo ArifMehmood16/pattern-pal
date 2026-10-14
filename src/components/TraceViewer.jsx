@@ -4,6 +4,7 @@ import {CodeBlock} from './ui.jsx';
 
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const display=value=>value===undefined?'Not defined yet':JSON.stringify(value,null,2);
+const compact=value=>value===undefined?'Not defined yet':JSON.stringify(value);
 
 export function DataTable({table,label,previous}) {
   return <div className="data-table-scroll"><table className="data-table"><caption>{label}</caption><thead><tr>{table.columns.map((column,i)=><th key={i}>{column}</th>)}</tr></thead><tbody>{table.values.length?table.values.map((row,i)=><tr key={i}>{row.map((value,j)=><td key={j} className={previous&&j>0&&!same(value,previous[i]?.[j-1])?'value-changed':''}>{value===null?<em>NULL</em>:String(value)}</td>)}</tr>):<tr><td colSpan={table.columns.length}>No rows</td></tr>}</tbody></table></div>;
@@ -68,6 +69,9 @@ export default function TraceViewer({example,onLine}){
       if(previousFocus?.isConnected)previousFocus.focus();else focusButton.current?.focus();
     };
   },[focused]);
+  useEffect(()=>{
+    if(focused&&!panelRef.current?.contains(document.activeElement))exitButton.current?.focus();
+  },[focused,data,error]);
   const nextSameCall=useMemo(()=>data?.steps.slice(index+1).find(s=>s.call===step?.call),[data,index,step?.call]);
   function jump(next){setPlaying(false);setIndex(next);}
   function swap(){setCodeSide(side=>side==='left'?'right':'left');setDropSide(null);}
@@ -76,20 +80,28 @@ export default function TraceViewer({example,onLine}){
     event.currentTarget.setPointerCapture(event.pointerId);
     dragRef.current={kind,side,startX:event.clientX,startY:event.clientY,moved:false,target:side};
   }
+  function closestDock(event){
+    const docks=['left','right'].map(side=>{
+      const rect=boardRef.current.querySelector(`.dock-${side}`).getBoundingClientRect();
+      return {side,distance:Math.hypot(event.clientX-(rect.left+rect.width/2),event.clientY-(rect.top+rect.height/2))};
+    });
+    return docks.sort((a,b)=>a.distance-b.distance)[0].side;
+  }
   function dragMove(event){
-    const drag=dragRef.current,rect=boardRef.current?.getBoundingClientRect();if(!drag||!rect)return;
+    const drag=dragRef.current;if(!drag||!boardRef.current)return;
     if(Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<6)return;
-    drag.moved=true;drag.target=event.clientX<rect.left+rect.width/2?'left':'right';setDropSide(drag.target);
+    drag.moved=true;drag.target=closestDock(event);setDropSide(drag.target);
   }
   function dragEnd(event){
     const drag=dragRef.current;if(!drag)return;
-    if(event.type!=='pointercancel'&&drag.moved&&drag.target!==drag.side)swap();
+    if(event.type!=='pointercancel'&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)>=6&&closestDock(event)!==drag.side)swap();
     dragRef.current=null;setDropSide(null);
   }
   async function copy(){try{await navigator.clipboard.writeText(example.code);setCopied(true);}catch{setCopied(false);}}
-  if(error)return <div className="result-note">{error}</div>;
-  if(!data)return <p className="hint">Loading the complete trace…</p>;
-  if(!step)return <p className="hint">This sample has no recorded function steps.</p>;
+  if(error||!data||!step){
+    const status=<section ref={panelRef} className={`trace-panel ${focused?'trace-focus':''}`} role={focused?'dialog':undefined} aria-modal={focused||undefined} aria-label="Playground status"><p className="hint">{error||(!data?'Loading the complete trace…':'This sample has no recorded function steps.')}</p>{focused&&<button ref={exitButton} className="btn" onClick={()=>setFocused(false)}>↙ Exit focus</button>}</section>;
+    return focused?createPortal(status,document.body):status;
+  }
   const before=step.state,after=step.event==='return'?before:nextSameCall?.state||before;
   const names=[...new Set([...Object.keys(before),...Object.keys(after)])];
   const changed=names.filter(name=>!same(before[name],after[name]));
@@ -102,10 +114,10 @@ export default function TraceViewer({example,onLine}){
         <div className="inspector-foot"><label><input type="checkbox" checked={follow} onChange={e=>setFollow(e.target.checked)}/> Follow line</label><button onClick={copy}>{copied?'Copied ✓':'Copy code'}</button></div>
       </>:<>
         <div className="variable-legend"><span className="change-dot"/> {changed.length} changed · click a variable to visualise</div>
-        <div className="inspector-variable-body">{names.map(name=><button key={name} className={`variable-card ${changed.includes(name)?'variable-changed':''} ${visualName===name?'variable-selected':''}`} onClick={()=>setSelected(name)} aria-pressed={visualName===name}>
+        <div className="inspector-variable-body">{names.map(name=><button key={name} className={`variable-card ${typeof before[name]!=='object'&&typeof after[name]!=='object'?'variable-scalar':''} ${changed.includes(name)?'variable-changed':''} ${visualName===name?'variable-selected':''}`} onClick={()=>setSelected(name)} aria-pressed={visualName===name}>
           <span className="variable-name"><b>{name}</b><small>{changed.includes(name)?'changed':'unchanged'}</small></span>
-          <span className="variable-snapshot"><small>BEFORE</small><code>{display(before[name])}</code></span>
-          <span className="variable-snapshot"><small>AFTER</small><code>{display(after[name])}</code></span>
+          <span className="variable-snapshot"><small>BEFORE</small><code>{compact(before[name])}</code></span>
+          <span className="variable-snapshot"><small>AFTER</small><code>{compact(after[name])}</code></span>
         </button>)}</div>
         <div className="inspector-foot"><span>Call {step.call} · depth {step.depth}</span><span>{names.length} locals</span></div>
       </>}
@@ -122,19 +134,20 @@ export default function TraceViewer({example,onLine}){
         <div className="stage-scroll">
           <div className="stage-source"><code>{example.code.split('\n')[step.line-1]}</code>{step.event==='return'&&<p>Return value: <strong>{JSON.stringify(step.result)}</strong></p>}</div>
           {visualName&&<><label className="visual-variable-label">Visualise<select aria-label="Visualised variable" value={visualName} onChange={e=>setSelected(e.target.value)}>{names.map(name=><option key={name}>{name}</option>)}</select></label>
-            <section className="visual-state"><div className="visual-state-label"><span>01</span> Before this line</div><Value value={before[visualName]} markers={markers(before)}/></section>
-            <div className="state-transition">↓ <span>{changed.length?`${changed.length} variable${changed.length===1?'':'s'} changed`:'No local value changed'}{step.event==='return'?' · function returns':''}</span></div>
-            <section className={`visual-state visual-after ${changed.includes(visualName)?'visual-state-changed':''}`}><div className="visual-state-label"><span>02</span> After this line</div><Value value={after[visualName]} previous={before[visualName]} markers={markers(after)}/></section>
+            <div className="visual-states"><section className="visual-state"><div className="visual-state-label"><span>01</span> Before this line</div><Value value={before[visualName]} markers={markers(before)}/></section>
+            <section className={`visual-state visual-after ${changed.includes(visualName)?'visual-state-changed':''}`}><div className="visual-state-label"><span>02</span> After this line</div><Value value={after[visualName]} previous={before[visualName]} markers={markers(after)}/></section></div>
+            <div className="state-transition">→ <span>{changed.length?`${changed.length} variable${changed.length===1?'':'s'} changed`:'No local value changed'}{step.event==='return'?' · function returns':''}</span></div>
           </>}
           <p className="stage-semantics">{step.event==='return'?'This is the final state of this function call.':`After = next recorded event in call ${step.call}. Recursive calls complete before their caller’s next snapshot.`} Tuple assignments update together; green cells and variables changed.</p>
           <details className="trace-detail"><summary>Time & space reasoning</summary><h3>TIME · {example.time}</h3><p>{example.timeReason}</p><h3>SPACE · {example.space}</h3><p>{example.spaceReason}</p></details>
+          <details className="trace-detail"><summary>How these snapshots work</summary><p>{data.semantics}</p></details>
           {data.conceptMatrix&&<details className="trace-detail"><summary>Recurrence explanation matrix</summary><DataTable table={data.conceptMatrix} label={data.conceptMatrix.name}/><p>This explains the recurrence. The execution states show the efficient storage used by the code.</p></details>}
         </div>
         <div className="stage-footer">Code & variables stay beside the visualisation.</div>
       </div>
       {inspector(codeSide==='right'?'code':'variables','right')}
     </div>
-    <div className="trace-bottom"><span>⠿ Drag panel headers to swap sides. Each panel scrolls independently.</span><button className="btn small" onClick={()=>setAll(v=>!v)}>{all?'Hide full history':'Show full history'}</button></div>
+    <div className="trace-bottom"><span>⠿ Drag headers to swap panels. Each panel scrolls independently.</span><button className="btn small" onClick={()=>setAll(v=>!v)}>{all?'Hide full history':'Show full history'}</button></div>
     {all&&<div className="full-history data-table-scroll"><table className="data-table"><thead><tr><th>Event</th><th>Call / function</th><th>Line</th><th>All local state before the line / at return</th></tr></thead><tbody>{data.steps.map((s,i)=><tr key={i} className={i===index?'changed-row':''}><td><button className="history-step" onClick={()=>jump(i)}>{i+1} · {s.event}</button></td><td>{s.call} · {s.function}<br/>Depth {s.depth}</td><td>{s.line}</td><td><pre className="state-value">{JSON.stringify(s.state,null,2)}{s.event==='return'?'\nReturn: '+JSON.stringify(s.result):''}</pre></td></tr>)}</tbody></table></div>}
   </section>;
   return focused?createPortal(view,document.body):view;

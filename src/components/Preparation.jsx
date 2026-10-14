@@ -10,7 +10,7 @@ export function PreparationHub({patterns,studyApi}) {
   const {study,setStudy}=studyApi,total=patterns.reduce((n,p)=>n+p.examples.length,0);
   const passed=study.readiness?.length||0;
   function toggle(i){setStudy(s=>({...s,blocks:s.blocks.includes(i)?s.blocks.filter(x=>x!==i):[...s.blocks,i]}));}
-  function download(){const blob=new Blob([JSON.stringify(study,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='patternpal-study-progress.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function download(){const blob=new Blob([JSON.stringify(study,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='pattern-atlas-study-progress.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   return <><PageHead eyebrow="ARIF’S ASSESSMENT PREPARATION" description="A focused route for the next 24 hours. Prioritise Python fundamentals and problem-solving, then use the wider library to strengthen weak areas.">Understand it.<br/><em>Practise. Review. Rewrite.</em></PageHead>
     <div className="prep-stats"><div><b>{total}</b><span>Coding examples</span></div><div><b>16</b><span>Python worked examples</span></div><div><b>25</b><span>SQL worked examples</span></div><div><b>{passed}</b><span>Readiness skills checked</span></div></div>
     <div className="finder-banner"><span className="banner-icon">◷</span><div><h3>Tonight’s core route: 6 hours 40 minutes</h3><p>Seven focused blocks. Add breaks and sleep; SQL is an optional 45-minute block, not a confirmed test topic.</p></div><a className="btn" href="#python/0">Start the first exercise ↗</a></div>

@@ -23,7 +23,7 @@ export default function App(){
   const [patterns,setPatterns]=useState(null),[error,setError]=useState('');
   useEffect(()=>{const controller=new AbortController();fetch('/patterns.json',{signal:controller.signal}).then(r=>{if(!r.ok)throw new Error('Could not load the learning content. Restart npm run dev and reload.');return r.json();}).then(setPatterns).catch(e=>{if(e.name!=='AbortError')setError(e.message);});return()=>controller.abort();},[]);
   if(error)return <main><h1>Content could not load</h1><p>{error}</p></main>;
-  if(!patterns)return <main><div className="eyebrow">PATTERNPAL</div><h1>Opening your field guide…</h1></main>;
+  if(!patterns)return <main><div className="eyebrow">PATTERN ATLAS</div><h1>Opening your field guide…</h1></main>;
   return <Workspace patterns={patterns}/>;
 }
 
@@ -65,7 +65,7 @@ function Workspace({patterns}) {
   }
   return <>
     <a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
-    <aside className="sidebar"><a className="brand" href="#library"><span className="brand-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="#7561cf" stroke-width="2.5" opacity=".5"><rect x="25" y="5" width="14" height="14" rx="4.5"/><rect x="45" y="5" width="14" height="14" rx="4.5"/><rect x="45" y="25" width="14" height="14" rx="4.5"/><rect x="5" y="45" width="14" height="14" rx="4.5"/><rect x="25" y="45" width="14" height="14" rx="4.5"/></g><g fill="#7561cf"><rect x="8" y="17" width="8" height="11"/><rect x="18" y="28" width="11" height="8"/><rect x="5" y="5" width="16" height="16" rx="5"/><rect x="5" y="25" width="16" height="16" rx="5"/><rect x="25" y="25" width="16" height="16" rx="5"/><rect x="44" y="44" width="16" height="16" rx="5"/><path d="M34 34L51 51" stroke="#7561cf" stroke-width="7"/></g></svg></span><span>pattern<span className="brand-light">pal</span><small>YOUR ALGORITHM SIDEKICK</small></span></a>
+    <aside className="sidebar"><a className="brand" href="#library"><span className="brand-mark">✳</span><span>pattern<span className="brand-light">atlas</span><small>YOUR ALGORITHM FIELD GUIDE</small></span></a>
       <div className="sidebar-label">STUDY WORKSPACE</div><nav aria-label="Main navigation">{navigation.map(([route, icon, label]) => <a href={`#${route}`} className={active === route ? 'active' : ''} aria-current={active === route ? 'page' : undefined} key={route}><span>{icon}</span>{label}{route === 'library' && <i>{patterns.length}</i>}{route === 'sql' && <i>25</i>}</a>)}</nav>
       <div className="sidebar-bottom"><div className="journey-head">Your learning journey <span>{progress.learned.length} / {patterns.length}</span></div><div className="progress-track" role="progressbar" aria-label="Methods learned" aria-valuemin={0} aria-valuemax={patterns.length} aria-valuenow={progress.learned.length}><div style={{ width: `${progress.learned.length / patterns.length * 100}%` }} /></div><a href="#resources" className="resource-link">↗ Guides & resources</a><div className="local-note">◌ {storageAvailable ? 'Progress saved on this device' : 'Progress kept for this session'}</div></div>
     </aside>

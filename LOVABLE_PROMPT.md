@@ -73,6 +73,10 @@ Efficient source examples include O(n log n) LIS, one-row edit distance, O(min(n
 
 ## Visual playground requirements
 
+Keep the complete Python code and all variables INSIDE the playground workspace while the learner interacts. Use three reserved areas on desktop: a code inspector, a clear data visualisation stage, and a variable inspector. The panels may float visually with subtle shadows, but their docks must never cover the stage. Support dragging headers to swap docks, equivalent keyboard/arrow controls, and a Reset panels action. On compact layouts keep the inspectors below/beside the stage with independent scrolling rather than overlapping overlays.
+
+Include a viewport-filling Focus playground mode with a labelled modal, trapped keyboard focus, Escape/Exit focus and restored focus afterwards. Highlight the actual current source line, wrap long lines, retain ALL code lines, and provide Copy code plus optional Follow line (scroll only the code pane). Render all local before/after values in the variable inspector and let clicking any variable choose the central visualisation. Show before/after data side by side and highlight changed cells. Controls include Previous/Next, a step slider, Play/Pause and speed selection. Manual stepping pauses playback; playback stops at the final event and can restart. Preserve progress when moving panels and entering/exiting focus.
+
 The traces are captured BEFORE each executed source line. The next event in the SAME call supplies the after state. Calls have unique IDs and depths; do not compare unrelated recursive frames. Return events show the returned value. Built-in operations are atomic at source-line level.
 
 For every example and every supplied input case provide:
@@ -115,6 +119,7 @@ Use native React components/state, not an iframe or imperative HTML wrapper. Kee
 - All 21 definitions, 107 coding examples, 16 Python refreshers and 25 SQL examples are present.
 - Every coding/refresher example has code, explanation, input/output, derived time/space and a working playground.
 - All 232 traced input cases are accessible and synchronised with the displayed source.
+- Complete code, variables and data stay together in every playground; panel movement never obscures the visualisation. Test focus entry/exit, input switching, playback, wrapping and desktop/mobile layouts.
 - Rotate Image shows both swapped matrix cells changing in one after state.
 - Edit Distance preserves old above/diagonal values while overwriting its DP row.
 - Quickselect clearly states input mutation, expected O(n) and worst O(n²).
