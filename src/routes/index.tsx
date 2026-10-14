@@ -1,24 +1,41 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Shell } from "@/components/Shell";
+import { problems } from "@/lib/data";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Pattern.py — Python Coding Interview Pattern Practice" },
+      { name: "description", content: "Read a LeetCode/HackerRank problem, diagnose it, and match it to the right solving pattern in Python." },
+      { property: "og:title", content: "Pattern.py — Diagnose problems, match patterns" },
+      { property: "og:description", content: "Practice recognising coding interview patterns in Python." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const diffColor = { Easy: "text-success", Medium: "text-accent", Hard: "text-destructive" };
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <Shell>
+      <h1 className="text-4xl font-bold tracking-tight">Read. Diagnose. <span className="text-primary">Pattern.</span></h1>
+      <p className="mt-3 max-w-2xl text-muted-foreground">
+        Pick a problem, guess which pattern solves it, then check your reasoning and the Python solution.
+      </p>
+      <ul className="mt-10 divide-y rounded-lg border bg-card">
+        {problems.map((p) => (
+          <li key={p.id}>
+            <Link to="/problems/$id" params={{ id: p.id }} className="flex items-center justify-between px-5 py-4 hover:bg-muted">
+              <span className="font-medium">{p.title}</span>
+              <span className="flex gap-4 font-mono text-xs">
+                <span className="text-muted-foreground">{p.source}</span>
+                <span className={diffColor[p.difficulty]}>{p.difficulty}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Shell>
   );
 }
