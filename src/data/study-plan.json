@@ -1,0 +1,181 @@
+{
+  "blocks": [
+    {
+      "title": "Python fundamentals",
+      "minutes": 40,
+      "description": "Functions, loops, conditions, range, enumerate, zip and return contracts.",
+      "drills": [
+        0,
+        7,
+        15
+      ],
+      "problems": []
+    },
+    {
+      "title": "Strings and lists",
+      "minutes": 45,
+      "description": "Slicing, comprehensions, append/pop, split/join; reason about copies.",
+      "drills": [
+        1,
+        2,
+        12
+      ],
+      "problems": [
+        "Valid Palindrome"
+      ]
+    },
+    {
+      "title": "Dictionaries and sets",
+      "minutes": 60,
+      "description": "get, Counter, defaultdict; frequency and complement reasoning.",
+      "drills": [
+        3,
+        4,
+        5,
+        8
+      ],
+      "problems": [
+        "Two Sum",
+        "Group Anagrams"
+      ]
+    },
+    {
+      "title": "Sorting and containers",
+      "minutes": 45,
+      "description": "key tuples, deque, heapq and stack invariants.",
+      "drills": [
+        6,
+        9,
+        10,
+        11
+      ],
+      "problems": [
+        "Valid Parentheses",
+        "Merge Intervals"
+      ]
+    },
+    {
+      "title": "Patterns and boundaries",
+      "minutes": 90,
+      "description": "Two pointers, windows, prefix sums and binary search. Trace every update.",
+      "drills": [
+        13,
+        14
+      ],
+      "problems": [
+        "Longest Unique Substring",
+        "Product of Array Except Self",
+        "Subarray Sum Equals K",
+        "First and Last Position of Element"
+      ]
+    },
+    {
+      "title": "Independent IDE practice",
+      "minutes": 90,
+      "description": "Choose two variations and solve them in your IDE without opening the reference. Explain the contract and complexity.",
+      "drills": [],
+      "problems": [
+        "Product of Array Except Self",
+        "Merge Intervals"
+      ],
+      "route": "problems"
+    },
+    {
+      "title": "Review and explain",
+      "minutes": 30,
+      "description": "Revisit your weakest pattern, trace its state, then rewrite in your IDE and justify the complexity.",
+      "drills": [],
+      "problems": [],
+      "route": "library"
+    }
+  ],
+  "pitfalls": [
+    [
+      "sort / sorted",
+      "list.sort() mutates and returns None. sorted() returns a new list.",
+      "values = [3,1,2]\nordered = sorted(values)\nvalues.sort()"
+    ],
+    [
+      "Independent matrix rows",
+      "Repeated references share mutations. Construct each row separately.",
+      "matrix = [[0] * cols for _ in range(rows)]"
+    ],
+    [
+      "Index zero",
+      "Zero is false in a boolean condition. Use explicit sentinels.",
+      "if index != -1:\n    return index"
+    ],
+    [
+      "Division",
+      "/ produces a floating result. // floors, including negatives. −7 // 3 is −3; truncation toward zero gives −2.",
+      "mid = (left + right) // 2"
+    ],
+    [
+      "Slices are copies",
+      "List and string slices allocate new sequences. Account for their time and memory.",
+      "tail = nums[1:]"
+    ],
+    [
+      "Mutation during iteration",
+      "Do not add/delete keys from a dict/set while iterating it. Iterate a snapshot or collect changes first.",
+      "for key in list(mapping):\n    if should_remove(key):\n        del mapping[key]"
+    ],
+    [
+      "Mutable default arguments",
+      "A default list is created once, not on every call. Use None then create a list.",
+      "def collect(value, items=None):\n    if items is None:\n        items = []\n    items.append(value)\n    return items"
+    ],
+    [
+      "Short-circuit guards",
+      "Check bounds or emptiness before indexing or popping. and/or evaluate left to right.",
+      "if stack and stack[-1] == target:\n    stack.pop()"
+    ],
+    [
+      "Aliasing and tuple assignment",
+      "a=b=[] shares a list. Tuple assignment evaluates all right-hand values first.",
+      "a, b = [], []\nleft, right = right, left"
+    ],
+    [
+      "Hashability",
+      "Set elements and dict keys must be hashable. Use a tuple rather than a list for a coordinate.",
+      "seen.add((row, col))"
+    ],
+    [
+      "Counter and defaultdict",
+      "Counter counts items. defaultdict creates values for missing keys; reading a missing key can insert it.",
+      "counts = Counter(values)\ngroups = defaultdict(list)"
+    ],
+    [
+      "Recursion and input size",
+      "Deep DFS may hit Python recursion limits. Use an iterative stack for very deep chains.",
+      "stack = [start]\nwhile stack:\n    node = stack.pop()"
+    ],
+    [
+      "Complexity in Python",
+      "list membership is linear; set/dict membership is expected constant time. pop(0) shifts a list; deque.popleft does not.",
+      "seen = set(values)\nqueue = deque(values)"
+    ],
+    [
+      "Signature and return type",
+      "Match the supplied function name, parameters and return type. Do not print instead of returning. Check whether stdin/stdout is required.",
+      "def solve(values):\n    return sum(values)"
+    ]
+  ],
+  "sqlMinutes": 45,
+  "assessmentFacts": [
+    "Two programming tests, one coding question per test (from your Equip screenshot).",
+    "Python 3 is available.",
+    "Actual duration, questions and difficulty remain unknown.",
+    "The demo’s first-character task only confirms editor workflow.",
+    "SQL is useful for the role; its presence in this assessment is not confirmed."
+  ],
+  "routine": [
+    "Read the contract and constraints before coding.",
+    "Write one ordinary case and one boundary case.",
+    "State a brute-force approach, then identify repeated work.",
+    "Choose an invariant or recurrence; estimate complexity.",
+    "Implement the exact signature and return type.",
+    "Test empty/singleton input, duplicates, zero, negatives and boundary positions when allowed.",
+    "In your IDE, inspect a failing input, explain the cause and rewrite the solution."
+  ]
+}

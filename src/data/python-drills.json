@@ -1,0 +1,1214 @@
+[
+  {
+    "title": "Maximum value and its first index",
+    "minutes": 12,
+    "topic": "Functions & loops",
+    "prompt": "Return (maximum, first_index). For empty input return (None,-1). Avoid max() and list.index() for this exercise.",
+    "code": "def maximum_and_index(nums):\n    if not nums:\n        return None, -1\n    best, index = nums[0], 0\n    for i, value in enumerate(nums):\n        if value > best:\n            best, index = value, i\n    return best, index",
+    "check": "maximum_and_index([-4,-1,-1,-3])==(-1,1) and maximum_and_index([])==(None,-1) and maximum_and_index([7])==(7,0)",
+    "difficulty": "Python refresh",
+    "insight": "Define the empty-input contract before indexing.",
+    "time": "O(n)",
+    "space": "O(1)",
+    "sampleInput": "maximum_and_index([-4, -1, -1, -3])",
+    "sampleOutput": "(-1, 1)",
+    "teaching": [
+      "Define the empty-input contract before indexing.",
+      "best and index are updated together only on a strict improvement. Equal values keep the earlier index.",
+      "The return tuple contains both outputs. The scan is O(n) time and O(1) auxiliary space."
+    ],
+    "hints": [
+      "Initialise from the first value so all-negative inputs work.",
+      "Use > rather than ≥ if the first occurrence must win."
+    ],
+    "priority": "Next",
+    "timeReason": "One pass visits each value once; each comparison and tuple update is constant work.",
+    "spaceReason": "Only a maximum and its first index are stored.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def maximum_and_index(nums):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "maximum_and_index([-4, -1, -1, -3]) == (-1, 1)",
+      "maximum_and_index([]) == (None, -1)",
+      "maximum_and_index([7]) == (7, 0)"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 3,
+        "text": "Check not nums before taking the branch. Review both branches in the whole code; boundary conditions decide which work is legal."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Execute best, index = (nums[0], 0). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 5,
+        "end": 7,
+        "text": "Process enumerate(nums). Define the empty-input contract before indexing. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 8,
+        "end": 8,
+        "text": "Return (best, index). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "Define the empty-input contract before indexing.",
+      "best and index are updated together only on a strict improvement. Equal values keep the earlier index.",
+      "The return tuple contains both outputs. The scan is O(n) time and O(1) auxiliary space."
+    ],
+    "traceUrl": "/traces/python-0.json",
+    "samples": [
+      {
+        "input": "maximum_and_index([-4, -1, -1, -3])",
+        "output": "(-1, 1)"
+      },
+      {
+        "input": "maximum_and_index([])",
+        "output": "(None, -1)"
+      },
+      {
+        "input": "maximum_and_index([7])",
+        "output": "(7, 0)"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-0.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-0-case-1.json"
+      },
+      {
+        "label": "Example 3",
+        "url": "/traces/python-0-case-2.json"
+      }
+    ]
+  },
+  {
+    "title": "Reverse words",
+    "minutes": 10,
+    "topic": "Strings & lists",
+    "prompt": "Reverse word order. Treat any whitespace as a separator and emit one space between words.",
+    "code": "def reverse_words(text):\n    words = text.split()\n    words.reverse()\n    return ' '.join(words)",
+    "check": "reverse_words(\"  hello   world  \")==\"world hello\" and reverse_words(\"\")==\"\"",
+    "difficulty": "Python refresh",
+    "insight": "split constructs the word list.",
+    "time": "O(L)",
+    "space": "O(L)",
+    "sampleInput": "reverse_words('  hello   world  ')",
+    "sampleOutput": "'world hello'",
+    "teaching": [
+      "split constructs the word list.",
+      "reverse changes that list in place; do not assign its return value.",
+      "join creates the output string. O(number of characters) time and space."
+    ],
+    "hints": [
+      "split() without an argument collapses whitespace.",
+      "list.reverse() mutates the list and returns None."
+    ],
+    "priority": "Next",
+    "timeReason": "split, reverse and join each process at most L input characters overall.",
+    "spaceReason": "Words and the returned string retain O(L) total character storage.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def reverse_words(text):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "reverse_words('  hello   world  ') == 'world hello'",
+      "reverse_words('') == ''"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute words = text.split(). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 3,
+        "text": "Execute words.reverse(). This operation updates the current state before the next block."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Return ' '.join(words). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "split constructs the word list.",
+      "reverse changes that list in place; do not assign its return value.",
+      "join creates the output string. O(number of characters) time and space."
+    ],
+    "traceUrl": "/traces/python-1.json",
+    "samples": [
+      {
+        "input": "reverse_words('  hello   world  ')",
+        "output": "'world hello'"
+      },
+      {
+        "input": "reverse_words('')",
+        "output": "''"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-1.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-1-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Palindrome with slicing",
+    "minutes": 8,
+    "topic": "Strings & slicing",
+    "prompt": "Determine whether a string exactly matches its reverse; this exercise does not ignore case or punctuation.",
+    "code": "def exact_palindrome(text):\n    reversed_text = text[::-1]\n    return text == reversed_text",
+    "check": "exact_palindrome(\"abba\") and not exact_palindrome(\"Abba\") and exact_palindrome(\"\")",
+    "difficulty": "Python refresh",
+    "insight": "Create the reversed copy using slicing.",
+    "time": "O(n)",
+    "space": "O(n)",
+    "sampleInput": "exact_palindrome('abba')",
+    "sampleOutput": "True",
+    "teaching": [
+      "Create the reversed copy using slicing.",
+      "Compare the two complete strings.",
+      "This is O(n) time and O(n) extra space; the two-pointer library example avoids the extra copy."
+    ],
+    "hints": [
+      "A slice step of −1 visits positions backwards."
+    ],
+    "priority": "Next",
+    "timeReason": "Creating and comparing the reversed slice each process n characters.",
+    "spaceReason": "text[::-1] allocates an n-character copy.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def exact_palindrome(text):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "exact_palindrome('abba')",
+      "not exact_palindrome('Abba')",
+      "exact_palindrome('')"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute reversed_text = text[::-1]. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 3,
+        "text": "Return text == reversed_text. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "Create the reversed copy using slicing.",
+      "Compare the two complete strings.",
+      "This is O(n) time and O(n) extra space; the two-pointer library example avoids the extra copy."
+    ],
+    "traceUrl": "/traces/python-2.json",
+    "samples": [
+      {
+        "input": "exact_palindrome('abba')",
+        "output": "True"
+      },
+      {
+        "input": "exact_palindrome('Abba')",
+        "output": "False"
+      },
+      {
+        "input": "exact_palindrome('')",
+        "output": "True"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-2.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-2-case-1.json"
+      },
+      {
+        "label": "Example 3",
+        "url": "/traces/python-2-case-2.json"
+      }
+    ]
+  },
+  {
+    "title": "First unique character",
+    "minutes": 12,
+    "topic": "Dictionaries",
+    "prompt": "Return the index of the first character appearing exactly once, or −1. Index zero is a valid answer.",
+    "code": "def first_unique(text):\n    counts = {}\n    for char in text:\n        counts[char] = counts.get(char, 0) + 1\n    for i,char in enumerate(text):\n        if counts[char] == 1:\n            return i\n    return -1",
+    "check": "first_unique(\"leetcode\")==0 and first_unique(\"loveleetcode\")==2 and first_unique(\"aabb\")==-1",
+    "difficulty": "Python refresh",
+    "insight": "get(char,0) handles a missing key without KeyError.",
+    "time": "O(n)",
+    "space": "O(alphabet size)",
+    "sampleInput": "first_unique('leetcode')",
+    "sampleOutput": "0",
+    "teaching": [
+      "get(char,0) handles a missing key without KeyError.",
+      "The second pass preserves input order and returns the earliest unique character.",
+      "Return −1 only after scanning every character. O(n) time and O(alphabet size) space."
+    ],
+    "hints": [
+      "Count in one pass, then scan the original order.",
+      "Do not write if index: when index can be zero."
+    ],
+    "priority": "Next",
+    "timeReason": "One counting pass plus one ordered scan is 2n expected-constant-time mapping operations.",
+    "spaceReason": "The frequency dictionary contains one count per distinct character.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def first_unique(text):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "first_unique('leetcode') == 0",
+      "first_unique('loveleetcode') == 2",
+      "first_unique('aabb') == -1"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute counts = {}. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "text": "Process text. get(char,0) handles a missing key without KeyError. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 5,
+        "end": 7,
+        "text": "Process enumerate(text). get(char,0) handles a missing key without KeyError. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 8,
+        "end": 8,
+        "text": "Return -1. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "get(char,0) handles a missing key without KeyError.",
+      "The second pass preserves input order and returns the earliest unique character.",
+      "Return −1 only after scanning every character. O(n) time and O(alphabet size) space."
+    ],
+    "traceUrl": "/traces/python-3.json",
+    "samples": [
+      {
+        "input": "first_unique('leetcode')",
+        "output": "0"
+      },
+      {
+        "input": "first_unique('loveleetcode')",
+        "output": "2"
+      },
+      {
+        "input": "first_unique('aabb')",
+        "output": "-1"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-3.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-3-case-1.json"
+      },
+      {
+        "label": "Example 3",
+        "url": "/traces/python-3-case-2.json"
+      }
+    ]
+  },
+  {
+    "title": "Frequency counts with Counter",
+    "minutes": 8,
+    "topic": "Counter",
+    "prompt": "Return a normal dictionary of character counts, including spaces and case as written.",
+    "code": "from collections import Counter\n\ndef character_counts(text):\n    return dict(Counter(text))",
+    "check": "character_counts(\"aab\")=={\"a\":2,\"b\":1} and character_counts(\"\")=={}",
+    "difficulty": "Python refresh",
+    "insight": "Counter creates counts for every character.",
+    "time": "O(n)",
+    "space": "O(alphabet size)",
+    "sampleInput": "character_counts('aab')",
+    "sampleOutput": "{'a': 2, 'b': 1}",
+    "teaching": [
+      "Counter creates counts for every character.",
+      "dict converts the Counter into an ordinary dictionary.",
+      "Counting takes O(n) time with O(distinct characters) space."
+    ],
+    "hints": [
+      "Counter counts iterable values; it is a mapping."
+    ],
+    "priority": "Next",
+    "timeReason": "Counter consumes each character once. Converting its distinct keys to dict is at most another O(n) pass.",
+    "spaceReason": "One mapping entry is kept for each distinct character.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "from collections import Counter\n\ndef character_counts(text):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "character_counts('aab') == {'a': 2, 'b': 1}",
+      "character_counts('') == {}"
+    ],
+    "blocks": [
+      {
+        "start": 1,
+        "end": 1,
+        "text": "Import from collections import Counter. Use this standard-library tool rather than recreating its data structure."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Return dict(Counter(text)). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "Counter creates counts for every character.",
+      "dict converts the Counter into an ordinary dictionary.",
+      "Counting takes O(n) time with O(distinct characters) space."
+    ],
+    "traceUrl": "/traces/python-4.json",
+    "samples": [
+      {
+        "input": "character_counts('aab')",
+        "output": "{'a': 2, 'b': 1}"
+      },
+      {
+        "input": "character_counts('')",
+        "output": "{}"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-4.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-4-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Group records with defaultdict",
+    "minutes": 10,
+    "topic": "defaultdict",
+    "prompt": "Input records are (category,value) tuples. Group values by category, preserving their arrival order.",
+    "code": "from collections import defaultdict\n\ndef group_records(records):\n    groups = defaultdict(list)\n    for category,value in records:\n        groups[category].append(value)\n    return dict(groups)",
+    "check": "group_records([(\"a\",1),(\"b\",2),(\"a\",3)])=={\"a\":[1,3],\"b\":[2]} and group_records([])=={}",
+    "difficulty": "Python refresh",
+    "insight": "A missing category automatically receives an empty list.",
+    "time": "O(n)",
+    "space": "O(n) output",
+    "sampleInput": "group_records([('a', 1), ('b', 2), ('a', 3)])",
+    "sampleOutput": "{'a': [1, 3], 'b': [2]}",
+    "teaching": [
+      "A missing category automatically receives an empty list.",
+      "Tuple unpacking names both fields, then append preserves input order.",
+      "Return a normal dict. O(n) time and O(n) total stored values."
+    ],
+    "hints": [
+      "defaultdict(list) constructs a fresh list for each missing key."
+    ],
+    "priority": "Next",
+    "timeReason": "Each record is unpacked and appended once, using expected constant-time dictionary access.",
+    "spaceReason": "The grouped output stores all n values, with one list per category.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "from collections import defaultdict\n\ndef group_records(records):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "group_records([('a', 1), ('b', 2), ('a', 3)]) == {'a': [1, 3], 'b': [2]}",
+      "group_records([]) == {}"
+    ],
+    "blocks": [
+      {
+        "start": 1,
+        "end": 1,
+        "text": "Import from collections import defaultdict. Use this standard-library tool rather than recreating its data structure."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Execute groups = defaultdict(list). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 5,
+        "end": 6,
+        "text": "Process records. A missing category automatically receives an empty list. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 7,
+        "end": 7,
+        "text": "Return dict(groups). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "A missing category automatically receives an empty list.",
+      "Tuple unpacking names both fields, then append preserves input order.",
+      "Return a normal dict. O(n) time and O(n) total stored values."
+    ],
+    "traceUrl": "/traces/python-5.json",
+    "samples": [
+      {
+        "input": "group_records([('a', 1), ('b', 2), ('a', 3)])",
+        "output": "{'a': [1, 3], 'b': [2]}"
+      },
+      {
+        "input": "group_records([])",
+        "output": "{}"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-5.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-5-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Sort records by two keys",
+    "minutes": 10,
+    "topic": "Sorting & tuples",
+    "prompt": "Records are (name,score). Sort highest score first, then name alphabetically for ties. Return a new list.",
+    "code": "def sort_records(records):\n    return sorted(records, key=lambda record: (-record[1], record[0]))",
+    "check": "sort_records([(\"Zoe\",9),(\"Ali\",9),(\"Bea\",7)])==[(\"Ali\",9),(\"Zoe\",9),(\"Bea\",7)] and sort_records([])==[]",
+    "difficulty": "Python refresh",
+    "insight": "The key tuple ranks score first, then name.",
+    "time": "O(n log n)",
+    "space": "O(n) output / sort storage",
+    "sampleInput": "sort_records([('Zoe', 9), ('Ali', 9), ('Bea', 7)])",
+    "sampleOutput": "[('Ali', 9), ('Zoe', 9), ('Bea', 7)]",
+    "teaching": [
+      "The key tuple ranks score first, then name.",
+      "sorted returns a new list and leaves the input order unchanged.",
+      "O(n log n) time; O(n) output space. list.sort would mutate input and return None."
+    ],
+    "hints": [
+      "Tuples compare left to right. A negative numeric score reverses its order."
+    ],
+    "priority": "Next",
+    "timeReason": "Python comparison sorting uses O(n log n) comparisons in the general case. The two-field key is constant-sized.",
+    "spaceReason": "sorted creates an n-record list and sorting can use O(n) temporary storage.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def sort_records(records):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "sort_records([('Zoe', 9), ('Ali', 9), ('Bea', 7)]) == [('Ali', 9), ('Zoe', 9), ('Bea', 7)]",
+      "sort_records([]) == []"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Return sorted(records, key=lambda record: (-record[1], record[0])). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "The key tuple ranks score first, then name.",
+      "sorted returns a new list and leaves the input order unchanged.",
+      "O(n log n) time; O(n) output space. list.sort would mutate input and return None."
+    ],
+    "traceUrl": "/traces/python-6.json",
+    "samples": [
+      {
+        "input": "sort_records([('Zoe', 9), ('Ali', 9), ('Bea', 7)])",
+        "output": "[('Ali', 9), ('Zoe', 9), ('Bea', 7)]"
+      },
+      {
+        "input": "sort_records([])",
+        "output": "[]"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-6.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-6-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Dot product with zip",
+    "minutes": 8,
+    "topic": "zip & comprehensions",
+    "prompt": "For two equal-length numeric lists, return the sum of pairwise products.",
+    "code": "def dot_product(a, b):\n    return sum(x * y for x,y in zip(a,b))",
+    "check": "dot_product([1,2,3],[4,5,6])==32 and dot_product([],[])==0",
+    "difficulty": "Python refresh",
+    "insight": "zip creates position-wise pairs.",
+    "time": "O(n)",
+    "space": "O(1) auxiliary",
+    "sampleInput": "dot_product([1, 2, 3], [4, 5, 6])",
+    "sampleOutput": "32",
+    "teaching": [
+      "zip creates position-wise pairs.",
+      "The generator computes products lazily, and sum accumulates them.",
+      "This contract requires equal lengths. O(n) time and O(1) auxiliary space."
+    ],
+    "hints": [
+      "zip pairs items by position; normally it stops at the shorter input."
+    ],
+    "priority": "Next",
+    "timeReason": "zip yields each pair once; the generator multiplies and sum adds once per pair.",
+    "spaceReason": "The generator does not allocate a product list; only current pair and total are needed.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def dot_product(a, b):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "dot_product([1, 2, 3], [4, 5, 6]) == 32",
+      "dot_product([], []) == 0"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Return sum((x * y for x, y in zip(a, b))). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "zip creates position-wise pairs.",
+      "The generator computes products lazily, and sum accumulates them.",
+      "This contract requires equal lengths. O(n) time and O(1) auxiliary space."
+    ],
+    "traceUrl": "/traces/python-7.json",
+    "samples": [
+      {
+        "input": "dot_product([1, 2, 3], [4, 5, 6])",
+        "output": "32"
+      },
+      {
+        "input": "dot_product([], [])",
+        "output": "0"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-7.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-7-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Missing values with a set",
+    "minutes": 10,
+    "topic": "Sets",
+    "prompt": "Given integers, return which values in the inclusive range 1..n are absent, in ascending order.",
+    "code": "def missing_values(nums, n):\n    present = set(nums)\n    return [value for value in range(1,n+1) if value not in present]",
+    "check": "missing_values([1,1,3],4)==[2,4] and missing_values([],0)==[]",
+    "difficulty": "Python refresh",
+    "insight": "A set removes duplicate values and supports expected constant-time membership.",
+    "time": "O(len(nums) + n)",
+    "space": "O(distinct input + output)",
+    "sampleInput": "missing_values([1, 1, 3], 4)",
+    "sampleOutput": "[2, 4]",
+    "teaching": [
+      "A set removes duplicate values and supports expected constant-time membership.",
+      "range(1,n+1) includes n.",
+      "The comprehension preserves ascending iteration order. O(len(nums)+n) expected time."
+    ],
+    "hints": [
+      "range stops before its second argument."
+    ],
+    "priority": "Next",
+    "timeReason": "Build the set once, then perform n expected-constant-time membership checks.",
+    "spaceReason": "The set holds distinct input values and the returned list holds missing values.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def missing_values(nums, n):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "missing_values([1, 1, 3], 4) == [2, 4]",
+      "missing_values([], 0) == []"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute present = set(nums). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 3,
+        "text": "Return [value for value in range(1, n + 1) if value not in present]. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "A set removes duplicate values and supports expected constant-time membership.",
+      "range(1,n+1) includes n.",
+      "The comprehension preserves ascending iteration order. O(len(nums)+n) expected time."
+    ],
+    "traceUrl": "/traces/python-8.json",
+    "samples": [
+      {
+        "input": "missing_values([1, 1, 3], 4)",
+        "output": "[2, 4]"
+      },
+      {
+        "input": "missing_values([], 0)",
+        "output": "[]"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-8.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-8-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Stack with append and pop",
+    "minutes": 12,
+    "topic": "Stacks",
+    "prompt": "Validate bracket-only input containing (),[] and {}. Return a boolean.",
+    "code": "def balanced_brackets(text):\n    stack = []\n    matching = {')':'(', ']':'[', '}':'{'}\n    for char in text:\n        if char in matching:\n            if not stack or stack.pop() != matching[char]:\n                return False\n        else:\n            stack.append(char)\n    return not stack",
+    "check": "balanced_brackets(\"([])\") and not balanced_brackets(\"([)]\") and not balanced_brackets(\"]\")",
+    "difficulty": "Python refresh",
+    "insight": "append pushes onto the right, and pop removes the newest entry.",
+    "time": "O(n)",
+    "space": "O(n)",
+    "sampleInput": "balanced_brackets('([])')",
+    "sampleOutput": "True",
+    "teaching": [
+      "append pushes onto the right, and pop removes the newest entry.",
+      "Guard an empty stack before popping. Short-circuit or avoids the invalid pop.",
+      "After the scan, no unmatched openers may remain. O(n) time and O(n) space."
+    ],
+    "hints": [
+      "A closing bracket must match the most recent opener."
+    ],
+    "priority": "Next",
+    "timeReason": "Each bracket is visited once and pushed or popped at most once.",
+    "spaceReason": "All n characters could be unclosed openers, so the stack can grow linearly.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def balanced_brackets(text):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "balanced_brackets('([])')",
+      "not balanced_brackets('([)]')",
+      "not balanced_brackets(']')"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute stack = []. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 3,
+        "text": "Execute matching = {')': '(', ']': '[', '}': '{'}. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 4,
+        "end": 9,
+        "text": "Process text. append pushes onto the right, and pop removes the newest entry. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 10,
+        "end": 10,
+        "text": "Return not stack. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "append pushes onto the right, and pop removes the newest entry.",
+      "Guard an empty stack before popping. Short-circuit or avoids the invalid pop.",
+      "After the scan, no unmatched openers may remain. O(n) time and O(n) space."
+    ],
+    "traceUrl": "/traces/python-9.json",
+    "samples": [
+      {
+        "input": "balanced_brackets('([])')",
+        "output": "True"
+      },
+      {
+        "input": "balanced_brackets('([)]')",
+        "output": "False"
+      },
+      {
+        "input": "balanced_brackets(']')",
+        "output": "False"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-9.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-9-case-1.json"
+      },
+      {
+        "label": "Example 3",
+        "url": "/traces/python-9-case-2.json"
+      }
+    ]
+  },
+  {
+    "title": "Fixed window with deque",
+    "minutes": 12,
+    "topic": "deque",
+    "prompt": "Return the sum of every length-k contiguous window. Require 1 ≤ k ≤ len(nums).",
+    "code": "from collections import deque\n\ndef fixed_window_sums(nums, k):\n    window, total, result = deque(), 0, []\n    for value in nums:\n        window.append(value)\n        total += value\n        if len(window) > k:\n            total -= window.popleft()\n        if len(window) == k:\n            result.append(total)\n    return result",
+    "check": "fixed_window_sums([1,2,3,4],2)==[3,5,7] and fixed_window_sums([-2,3],1)==[-2,3]",
+    "difficulty": "Python refresh",
+    "insight": "Add each value to the queue and total.",
+    "time": "O(n)",
+    "space": "O(k) auxiliary + output",
+    "sampleInput": "fixed_window_sums([1, 2, 3, 4], 2)",
+    "sampleOutput": "[3, 5, 7]",
+    "teaching": [
+      "Add each value to the queue and total.",
+      "If capacity is exceeded, remove the oldest value from both states.",
+      "Emit a sum only when the window is full. O(n) time, O(k) auxiliary space plus output."
+    ],
+    "hints": [
+      "deque.popleft is efficient; list.pop(0) shifts later elements."
+    ],
+    "priority": "Next",
+    "timeReason": "Every value enters once and can leave the deque once; sums are updated instead of recomputed.",
+    "spaceReason": "The queue holds at most k values; output contains n−k+1 sums.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "from collections import deque\n\ndef fixed_window_sums(nums, k):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "fixed_window_sums([1, 2, 3, 4], 2) == [3, 5, 7]",
+      "fixed_window_sums([-2, 3], 1) == [-2, 3]"
+    ],
+    "blocks": [
+      {
+        "start": 1,
+        "end": 1,
+        "text": "Import from collections import deque. Use this standard-library tool rather than recreating its data structure."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Execute window, total, result = (deque(), 0, []). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 5,
+        "end": 11,
+        "text": "Process nums. Add each value to the queue and total. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 12,
+        "end": 12,
+        "text": "Return result. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "Add each value to the queue and total.",
+      "If capacity is exceeded, remove the oldest value from both states.",
+      "Emit a sum only when the window is full. O(n) time, O(k) auxiliary space plus output."
+    ],
+    "traceUrl": "/traces/python-10.json",
+    "samples": [
+      {
+        "input": "fixed_window_sums([1, 2, 3, 4], 2)",
+        "output": "[3, 5, 7]"
+      },
+      {
+        "input": "fixed_window_sums([-2, 3], 1)",
+        "output": "[-2, 3]"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-10.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-10-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Top three using heapq",
+    "minutes": 10,
+    "topic": "heapq",
+    "prompt": "Return up to three largest values in descending order, counting duplicates.",
+    "code": "import heapq\n\ndef largest_three(nums):\n    return heapq.nlargest(3, nums)",
+    "check": "largest_three([5,1,8,8,2])==[8,8,5] and largest_three([1])==[1]",
+    "difficulty": "Python refresh",
+    "insight": "nlargest keeps the best candidates without requiring a full sort.",
+    "time": "O(n)",
+    "space": "O(1) selection space",
+    "sampleInput": "largest_three([5, 1, 8, 8, 2])",
+    "sampleOutput": "[8, 8, 5]",
+    "teaching": [
+      "nlargest keeps the best candidates without requiring a full sort.",
+      "Duplicate values count independently in this exercise.",
+      "O(n log 3), effectively O(n) for this fixed size; O(3) selection space."
+    ],
+    "hints": [
+      "Python’s basic heap is a min-heap; nlargest handles selection for you."
+    ],
+    "priority": "Next",
+    "timeReason": "Selecting the top fixed count 3 requires O(n log 3), which is O(n).",
+    "spaceReason": "Only three heap candidates need to be retained, independent of n.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "import heapq\n\ndef largest_three(nums):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "largest_three([5, 1, 8, 8, 2]) == [8, 8, 5]",
+      "largest_three([1]) == [1]"
+    ],
+    "blocks": [
+      {
+        "start": 1,
+        "end": 1,
+        "text": "Import import heapq. Use this standard-library tool rather than recreating its data structure."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Return heapq.nlargest(3, nums). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "nlargest keeps the best candidates without requiring a full sort.",
+      "Duplicate values count independently in this exercise.",
+      "O(n log 3), effectively O(n) for this fixed size; O(3) selection space."
+    ],
+    "traceUrl": "/traces/python-11.json",
+    "samples": [
+      {
+        "input": "largest_three([5, 1, 8, 8, 2])",
+        "output": "[8, 8, 5]"
+      },
+      {
+        "input": "largest_three([1])",
+        "output": "[1]"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-11.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-11-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Independent matrix rows",
+    "minutes": 10,
+    "topic": "Matrices",
+    "prompt": "Return an n×n zero matrix with only [0][0] set to 1; n ≥ 1. Other rows must stay zero.",
+    "code": "def independent_matrix(n):\n    matrix = [[0] * n for _ in range(n)]\n    matrix[0][0] = 1\n    return matrix",
+    "check": "independent_matrix(2)==[[1,0],[0,0]] and independent_matrix(1)==[[1]]",
+    "difficulty": "Python refresh",
+    "insight": "The comprehension constructs a new inner list for every row.",
+    "time": "O(n²)",
+    "space": "O(n²) output",
+    "sampleInput": "independent_matrix(2)",
+    "sampleOutput": "[[1, 0], [0, 0]]",
+    "teaching": [
+      "The comprehension constructs a new inner list for every row.",
+      "Only the first row’s first cell changes.",
+      "O(n²) allocation time and space. The full trace makes the row mutation visible."
+    ],
+    "hints": [
+      "Do not use [[0]*n]*n: that repeats references to one row."
+    ],
+    "priority": "Next",
+    "timeReason": "Allocate n independent rows each with n cells, then perform one cell update.",
+    "spaceReason": "The returned matrix has n² cells; only loop/allocation state is auxiliary.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def independent_matrix(n):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "independent_matrix(2) == [[1, 0], [0, 0]]",
+      "independent_matrix(1) == [[1]]"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute matrix = [[0] * n for _ in range(n)]. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 3,
+        "text": "Execute matrix[0][0] = 1. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 4,
+        "end": 4,
+        "text": "Return matrix. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "The comprehension constructs a new inner list for every row.",
+      "Only the first row’s first cell changes.",
+      "O(n²) allocation time and space. The full trace makes the row mutation visible."
+    ],
+    "traceUrl": "/traces/python-12.json",
+    "samples": [
+      {
+        "input": "independent_matrix(2)",
+        "output": "[[1, 0], [0, 0]]"
+      },
+      {
+        "input": "independent_matrix(1)",
+        "output": "[[1]]"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-12.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-12-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Binary search boundaries",
+    "minutes": 15,
+    "topic": "Binary search",
+    "prompt": "Return target’s index in a sorted list of distinct integers, or −1.",
+    "code": "def binary_search(nums, target):\n    left, right = 0, len(nums)-1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+    "check": "binary_search([1,3,5,7],1)==0 and binary_search([1,3,5,7],6)==-1 and binary_search([],2)==-1",
+    "difficulty": "Python refresh",
+    "insight": "Use // so mid remains an integer index.",
+    "time": "O(log n)",
+    "space": "O(1)",
+    "sampleInput": "binary_search([1, 3, 5, 7], 1)",
+    "sampleOutput": "0",
+    "teaching": [
+      "Use // so mid remains an integer index.",
+      "Discard mid itself after a nonmatching comparison; otherwise the interval may fail to shrink.",
+      "left<=right allows the final singleton candidate. O(log n) time and O(1) space."
+    ],
+    "hints": [
+      "Keep one consistent interval convention. Here both endpoints are inclusive."
+    ],
+    "priority": "Next",
+    "timeReason": "Each comparison halves the inclusive candidate interval; at most logarithmically many rounds are needed.",
+    "spaceReason": "Three integer indices are sufficient; no subarray copies are created.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def binary_search(nums, target):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "binary_search([1, 3, 5, 7], 1) == 0",
+      "binary_search([1, 3, 5, 7], 6) == -1",
+      "binary_search([], 2) == -1"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute left, right = (0, len(nums) - 1). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 10,
+        "text": "Process left <= right. Use // so mid remains an integer index. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 11,
+        "end": 11,
+        "text": "Return -1. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "Use // so mid remains an integer index.",
+      "Discard mid itself after a nonmatching comparison; otherwise the interval may fail to shrink.",
+      "left<=right allows the final singleton candidate. O(log n) time and O(1) space."
+    ],
+    "traceUrl": "/traces/python-13.json",
+    "samples": [
+      {
+        "input": "binary_search([1, 3, 5, 7], 1)",
+        "output": "0"
+      },
+      {
+        "input": "binary_search([1, 3, 5, 7], 6)",
+        "output": "-1"
+      },
+      {
+        "input": "binary_search([], 2)",
+        "output": "-1"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-13.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-13-case-1.json"
+      },
+      {
+        "label": "Example 3",
+        "url": "/traces/python-13-case-2.json"
+      }
+    ]
+  },
+  {
+    "title": "Prefix range sums",
+    "minutes": 12,
+    "topic": "Prefix sums",
+    "prompt": "Given values and inclusive queries (left,right), return the sum for each query.",
+    "code": "def query_sums(nums, queries):\n    prefix = [0]\n    for value in nums:\n        prefix.append(prefix[-1] + value)\n    return [prefix[right+1]-prefix[left] for left,right in queries]",
+    "check": "query_sums([2,-1,3],[(0,2),(1,1)])==[4,-1] and query_sums([],[])==[]",
+    "difficulty": "Python refresh",
+    "insight": "Leading zero represents the empty prefix.",
+    "time": "O(n + q)",
+    "space": "O(n) auxiliary + O(q) output",
+    "sampleInput": "query_sums([2, -1, 3], [(0, 2), (1, 1)])",
+    "sampleOutput": "[4, -1]",
+    "teaching": [
+      "Leading zero represents the empty prefix.",
+      "For an inclusive right endpoint, read prefix[right+1].",
+      "Subtract the prefix before left. O(n+queries) time and O(n) extra space plus output."
+    ],
+    "hints": [
+      "The prefix has length n+1; entry i includes values before i."
+    ],
+    "priority": "Next",
+    "timeReason": "Build n prefix sums, then answer q queries with constant work each.",
+    "spaceReason": "The prefix list has n+1 entries; result holds q sums.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def query_sums(nums, queries):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "query_sums([2, -1, 3], [(0, 2), (1, 1)]) == [4, -1]",
+      "query_sums([], []) == []"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute prefix = [0]. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 4,
+        "text": "Process nums. Leading zero represents the empty prefix. The complete trace below shows every executed iteration and each resulting state."
+      },
+      {
+        "start": 5,
+        "end": 5,
+        "text": "Return [prefix[right + 1] - prefix[left] for left, right in queries]. This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "Leading zero represents the empty prefix.",
+      "For an inclusive right endpoint, read prefix[right+1].",
+      "Subtract the prefix before left. O(n+queries) time and O(n) extra space plus output."
+    ],
+    "traceUrl": "/traces/python-14.json",
+    "samples": [
+      {
+        "input": "query_sums([2, -1, 3], [(0, 2), (1, 1)])",
+        "output": "[4, -1]"
+      },
+      {
+        "input": "query_sums([], [])",
+        "output": "[]"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-14.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-14-case-1.json"
+      }
+    ]
+  },
+  {
+    "title": "Parse whitespace-separated input",
+    "minutes": 10,
+    "topic": "Input/output",
+    "prompt": "Given text containing whitespace-separated integers, return their sum. Empty text returns zero.",
+    "code": "def sum_input(text):\n    values = [int(token) for token in text.split()]\n    return sum(values)",
+    "check": "sum_input(\"1  2\\n-3 4\")==4 and sum_input(\"\")==0",
+    "difficulty": "Python refresh",
+    "insight": "split without an explicit separator handles arbitrary whitespace.",
+    "time": "O(L)",
+    "space": "O(L)",
+    "sampleInput": "sum_input('1  2\\n-3 4')",
+    "sampleOutput": "4",
+    "teaching": [
+      "split without an explicit separator handles arbitrary whitespace.",
+      "Convert every token to int, then sum.",
+      "O(number of characters + values) time. For the real editor, follow its exact function or stdin contract; the assessment’s contract is not known here."
+    ],
+    "hints": [
+      "Whitespace may include spaces and newlines."
+    ],
+    "priority": "Next",
+    "timeReason": "split and integer conversion process the L-character text, then sum visits each parsed value.",
+    "spaceReason": "The token list and integer list retain storage proportional to the input size under ordinary bounded-integer assumptions.",
+    "optimality": "This is a focused Python-language example. Its allocation and copying costs are explicit; the pattern library shows space-saving alternatives when they matter.",
+    "starter": "def sum_input(text):\n    # Write your solution here.\n    pass",
+    "tests": [
+      "sum_input('1  2\\n-3 4') == 4",
+      "sum_input('') == 0"
+    ],
+    "blocks": [
+      {
+        "start": 2,
+        "end": 2,
+        "text": "Execute values = [int(token) for token in text.split()]. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+      },
+      {
+        "start": 3,
+        "end": 3,
+        "text": "Return sum(values). This is the function’s output; it does not print automatically."
+      }
+    ],
+    "explanation": [
+      "split without an explicit separator handles arbitrary whitespace.",
+      "Convert every token to int, then sum.",
+      "O(number of characters + values) time. For the real editor, follow its exact function or stdin contract; the assessment’s contract is not known here."
+    ],
+    "traceUrl": "/traces/python-15.json",
+    "samples": [
+      {
+        "input": "sum_input('1  2\\n-3 4')",
+        "output": "4"
+      },
+      {
+        "input": "sum_input('')",
+        "output": "0"
+      }
+    ],
+    "traces": [
+      {
+        "label": "Example 1",
+        "url": "/traces/python-15.json"
+      },
+      {
+        "label": "Example 2",
+        "url": "/traces/python-15-case-1.json"
+      }
+    ]
+  }
+]

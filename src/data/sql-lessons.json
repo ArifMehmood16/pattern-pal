@@ -1,0 +1,2828 @@
+{
+  "lessons": [
+    {
+      "id": 0,
+      "title": "Big Countries",
+      "category": "Filtering",
+      "prompt": "Return countries with area ≥ 3,000,000 OR population ≥ 25,000,000. Sort by name.",
+      "code": "SELECT name FROM countries WHERE area >= 3000000 OR population >= 25000000 ORDER BY name;",
+      "postgres": "SELECT name FROM countries WHERE area >= 3000000 OR population >= 25000000 ORDER BY name;",
+      "inputs": [
+        {
+          "name": "countries",
+          "columns": [
+            "name",
+            "area",
+            "population"
+          ],
+          "values": [
+            [
+              "A",
+              4000000,
+              1000000
+            ],
+            [
+              "B",
+              1000000,
+              30000000
+            ],
+            [
+              "C",
+              1000000,
+              1000000
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "name"
+        ],
+        "values": [
+          [
+            "A"
+          ],
+          [
+            "B"
+          ]
+        ]
+      },
+      "steps": [
+        "FROM starts with every country.",
+        "WHERE retains a row satisfying either condition.",
+        "SELECT projects name; ORDER BY makes output deterministic."
+      ],
+      "trap": "OR and AND express different contracts.",
+      "priority": "Tonight",
+      "stages": []
+    },
+    {
+      "id": 1,
+      "title": "Recyclable and Low Fat Products",
+      "category": "Filtering",
+      "prompt": "Return IDs whose low_fats and recyclable flags are both Y; sort IDs.",
+      "code": "SELECT id FROM products WHERE low_fats = 'Y' AND recyclable = 'Y' ORDER BY id;",
+      "postgres": "SELECT id FROM products WHERE low_fats = 'Y' AND recyclable = 'Y' ORDER BY id;",
+      "inputs": [
+        {
+          "name": "products",
+          "columns": [
+            "id",
+            "low_fats",
+            "recyclable"
+          ],
+          "values": [
+            [
+              1,
+              "Y",
+              "Y"
+            ],
+            [
+              2,
+              "Y",
+              "N"
+            ],
+            [
+              3,
+              "N",
+              "Y"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id"
+        ],
+        "values": [
+          [
+            1
+          ]
+        ]
+      },
+      "steps": [
+        "Filter both columns with AND.",
+        "Project the ID and sort it."
+      ],
+      "trap": "Use single quotes for text literals.",
+      "priority": "Tonight",
+      "stages": []
+    },
+    {
+      "id": 2,
+      "title": "Customers Who Never Order",
+      "category": "Joins",
+      "prompt": "Return customers with no order of any status, sorted by ID.",
+      "code": "SELECT c.id, c.name\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE o.id IS NULL\nORDER BY c.id;",
+      "postgres": "SELECT c.id, c.name\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nWHERE o.id IS NULL\nORDER BY c.id;",
+      "inputs": [
+        {
+          "name": "customers",
+          "columns": [
+            "id",
+            "name"
+          ],
+          "values": [
+            [
+              1,
+              "Ada"
+            ],
+            [
+              2,
+              "Ben"
+            ],
+            [
+              3,
+              "Cara"
+            ],
+            [
+              4,
+              "Zed"
+            ]
+          ]
+        },
+        {
+          "name": "orders",
+          "columns": [
+            "id",
+            "customer_id",
+            "amount",
+            "order_date",
+            "status"
+          ],
+          "values": [
+            [
+              1,
+              1,
+              100,
+              "2026-01-01",
+              "paid"
+            ],
+            [
+              2,
+              1,
+              50,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              3,
+              2,
+              80,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              4,
+              4,
+              20,
+              "2026-01-03",
+              "cancelled"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id",
+          "name"
+        ],
+        "values": [
+          [
+            3,
+            "Cara"
+          ]
+        ]
+      },
+      "steps": [
+        "LEFT JOIN preserves each customer, even with no matched order.",
+        "Unmatched order IDs are NULL.",
+        "Filter the missing match and sort customer IDs."
+      ],
+      "trap": "A filter on a right-table column in WHERE can unintentionally turn a LEFT JOIN into an inner join.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After LEFT JOIN · matched and unmatched customers",
+          "columns": [
+            "id",
+            "name",
+            "order_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              1
+            ],
+            [
+              1,
+              "Ada",
+              2
+            ],
+            [
+              2,
+              "Ben",
+              3
+            ],
+            [
+              3,
+              "Cara",
+              null
+            ],
+            [
+              4,
+              "Zed",
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Employees Earning More Than Managers",
+      "category": "Joins",
+      "prompt": "Return employees whose salary exceeds their manager’s salary; sort IDs.",
+      "code": "SELECT e.id, e.name\nFROM employees e\nJOIN employees m ON e.manager_id = m.id\nWHERE e.salary > m.salary\nORDER BY e.id;",
+      "postgres": "SELECT e.id, e.name\nFROM employees e\nJOIN employees m ON e.manager_id = m.id\nWHERE e.salary > m.salary\nORDER BY e.id;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id",
+          "name"
+        ],
+        "values": [
+          [
+            3,
+            "Cara"
+          ]
+        ]
+      },
+      "steps": [
+        "Use two aliases for the same table: employee and manager.",
+        "Join on the manager’s ID, not department.",
+        "Compare salaries; NULL salary comparisons do not evaluate True."
+      ],
+      "trap": "A self-join represents two different roles, not duplicate output by itself.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After self-join · the two salary roles",
+          "columns": [
+            "employee",
+            "salary",
+            "manager",
+            "manager_salary"
+          ],
+          "values": [
+            [
+              "Ben",
+              80,
+              "Ada",
+              100
+            ],
+            [
+              "Cara",
+              120,
+              "Ada",
+              100
+            ],
+            [
+              "Dan",
+              100,
+              "Ada",
+              100
+            ],
+            [
+              "Eli",
+              90,
+              "Ada",
+              100
+            ],
+            [
+              "Fay",
+              70,
+              "Ada",
+              100
+            ],
+            [
+              "Hao",
+              130,
+              "Gia",
+              150
+            ],
+            [
+              "Ivy",
+              130,
+              "Gia",
+              150
+            ],
+            [
+              "Jay",
+              null,
+              "Gia",
+              150
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Duplicate Emails",
+      "category": "Grouping",
+      "prompt": "Return each non-NULL email occurring more than once, sorted alphabetically.",
+      "code": "SELECT email\nFROM contacts\nWHERE email IS NOT NULL\nGROUP BY email\nHAVING COUNT(*) > 1\nORDER BY email;",
+      "postgres": "SELECT email\nFROM contacts\nWHERE email IS NOT NULL\nGROUP BY email\nHAVING COUNT(*) > 1\nORDER BY email;",
+      "inputs": [
+        {
+          "name": "contacts",
+          "columns": [
+            "id",
+            "email"
+          ],
+          "values": [
+            [
+              1,
+              "a@example.com"
+            ],
+            [
+              2,
+              "b@example.com"
+            ],
+            [
+              3,
+              "a@example.com"
+            ],
+            [
+              4,
+              null
+            ],
+            [
+              5,
+              null
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "email"
+        ],
+        "values": [
+          [
+            "a@example.com"
+          ]
+        ]
+      },
+      "steps": [
+        "Exclude NULL emails before grouping.",
+        "Group identical emails and count rows.",
+        "HAVING filters groups after aggregation."
+      ],
+      "trap": "WHERE filters input rows; HAVING filters aggregated groups.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After grouping · counts before HAVING",
+          "columns": [
+            "email",
+            "occurrences"
+          ],
+          "values": [
+            [
+              "a@example.com",
+              2
+            ],
+            [
+              "b@example.com",
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Second Highest Salary",
+      "category": "Subqueries",
+      "prompt": "Return one row with the second-highest distinct non-NULL salary, or NULL if absent.",
+      "code": "SELECT MAX(salary) AS second_salary\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);",
+      "postgres": "SELECT MAX(salary) AS second_salary\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "second_salary"
+        ],
+        "values": [
+          [
+            130
+          ]
+        ]
+      },
+      "steps": [
+        "The subquery obtains the highest salary.",
+        "Keep only salaries strictly below it, excluding all ties for first.",
+        "MAX on those remaining values is second highest; an empty aggregate yields NULL."
+      ],
+      "trap": "Second employee is different from second distinct salary.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After removing the highest distinct salary",
+          "columns": [
+            "salary"
+          ],
+          "values": [
+            [
+              130
+            ],
+            [
+              120
+            ],
+            [
+              100
+            ],
+            [
+              90
+            ],
+            [
+              80
+            ],
+            [
+              70
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Nth Highest Distinct Salary",
+      "category": "Ranking",
+      "prompt": "For n=3, return the third-highest distinct salary, or NULL if absent.",
+      "code": "WITH ranked AS (\n  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS position\n  FROM employees WHERE salary IS NOT NULL\n)\nSELECT MAX(salary) AS third_salary FROM ranked WHERE position = 3;",
+      "postgres": "WITH ranked AS (\n  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS position\n  FROM employees WHERE salary IS NOT NULL\n)\nSELECT MAX(salary) AS third_salary FROM ranked WHERE position = 3;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "third_salary"
+        ],
+        "values": [
+          [
+            120
+          ]
+        ]
+      },
+      "steps": [
+        "Filter NULL salaries before ranking.",
+        "DENSE_RANK assigns one consecutive rank per distinct salary.",
+        "Filter rank 3 in an outer query and use MAX to return exactly one row."
+      ],
+      "trap": "Filter window results in an outer query or CTE, not the same SELECT’s WHERE.",
+      "priority": "Tonight",
+      "stages": []
+    },
+    {
+      "id": 7,
+      "title": "Department Highest Salary",
+      "category": "Ranking",
+      "prompt": "Return every employee tied for highest salary in each department. Sort department and employee IDs.",
+      "code": "WITH ranked AS (\n  SELECT e.*, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS position\n  FROM employees e WHERE salary IS NOT NULL\n)\nSELECT d.name AS department, r.name AS employee, r.salary\nFROM ranked r JOIN departments d ON d.id = r.department_id\nWHERE position = 1\nORDER BY d.id, r.id;",
+      "postgres": "WITH ranked AS (\n  SELECT e.*, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS position\n  FROM employees e WHERE salary IS NOT NULL\n)\nSELECT d.name AS department, r.name AS employee, r.salary\nFROM ranked r JOIN departments d ON d.id = r.department_id\nWHERE position = 1\nORDER BY d.id, r.id;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        },
+        {
+          "name": "departments",
+          "columns": [
+            "id",
+            "name"
+          ],
+          "values": [
+            [
+              1,
+              "Engineering"
+            ],
+            [
+              2,
+              "Product"
+            ],
+            [
+              3,
+              "Operations"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "department",
+          "employee",
+          "salary"
+        ],
+        "values": [
+          [
+            "Engineering",
+            "Cara",
+            120
+          ],
+          [
+            "Product",
+            "Gia",
+            150
+          ]
+        ]
+      },
+      "steps": [
+        "PARTITION BY restarts ranking for each department.",
+        "Ranking excludes unknown salaries.",
+        "Join department labels and retain every rank-one row."
+      ],
+      "trap": "ROW_NUMBER would arbitrarily keep one tie rather than all top earners.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After department partitioning and dense ranking",
+          "columns": [
+            "department_id",
+            "name",
+            "salary",
+            "position"
+          ],
+          "values": [
+            [
+              1,
+              "Cara",
+              120,
+              1
+            ],
+            [
+              1,
+              "Ada",
+              100,
+              2
+            ],
+            [
+              1,
+              "Dan",
+              100,
+              2
+            ],
+            [
+              1,
+              "Eli",
+              90,
+              3
+            ],
+            [
+              1,
+              "Ben",
+              80,
+              4
+            ],
+            [
+              1,
+              "Fay",
+              70,
+              5
+            ],
+            [
+              2,
+              "Gia",
+              150,
+              1
+            ],
+            [
+              2,
+              "Hao",
+              130,
+              2
+            ],
+            [
+              2,
+              "Ivy",
+              130,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Department Top Three Salaries",
+      "category": "Ranking",
+      "prompt": "Return employees in each department’s top three distinct salary levels; keep ties.",
+      "code": "WITH ranked AS (\n  SELECT e.*, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS position\n  FROM employees e WHERE salary IS NOT NULL\n)\nSELECT department_id, name, salary\nFROM ranked WHERE position <= 3\nORDER BY department_id, salary DESC, id;",
+      "postgres": "WITH ranked AS (\n  SELECT e.*, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS position\n  FROM employees e WHERE salary IS NOT NULL\n)\nSELECT department_id, name, salary\nFROM ranked WHERE position <= 3\nORDER BY department_id, salary DESC, id;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "department_id",
+          "name",
+          "salary"
+        ],
+        "values": [
+          [
+            1,
+            "Cara",
+            120
+          ],
+          [
+            1,
+            "Ada",
+            100
+          ],
+          [
+            1,
+            "Dan",
+            100
+          ],
+          [
+            1,
+            "Eli",
+            90
+          ],
+          [
+            2,
+            "Gia",
+            150
+          ],
+          [
+            2,
+            "Hao",
+            130
+          ],
+          [
+            2,
+            "Ivy",
+            130
+          ]
+        ]
+      },
+      "steps": [
+        "Rank distinct salaries independently per department.",
+        "Keep ranks 1–3, possibly yielding more than three employees.",
+        "Add a deterministic tie-breaker in the final ORDER BY."
+      ],
+      "trap": "ROW_NUMBER, RANK and DENSE_RANK have different tie and gap semantics.",
+      "priority": "Next",
+      "stages": [
+        {
+          "name": "All ranks before the top-three filter",
+          "columns": [
+            "department_id",
+            "name",
+            "salary",
+            "position"
+          ],
+          "values": [
+            [
+              1,
+              "Cara",
+              120,
+              1
+            ],
+            [
+              1,
+              "Ada",
+              100,
+              2
+            ],
+            [
+              1,
+              "Dan",
+              100,
+              2
+            ],
+            [
+              1,
+              "Eli",
+              90,
+              3
+            ],
+            [
+              1,
+              "Ben",
+              80,
+              4
+            ],
+            [
+              1,
+              "Fay",
+              70,
+              5
+            ],
+            [
+              2,
+              "Gia",
+              150,
+              1
+            ],
+            [
+              2,
+              "Hao",
+              130,
+              2
+            ],
+            [
+              2,
+              "Ivy",
+              130,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Rank Scores",
+      "category": "Ranking",
+      "prompt": "Return students and their dense rank by score, highest first; break output ties by ID.",
+      "code": "SELECT student, score,\n       DENSE_RANK() OVER (ORDER BY score DESC) AS position\nFROM scores ORDER BY score DESC, id;",
+      "postgres": "SELECT student, score,\n       DENSE_RANK() OVER (ORDER BY score DESC) AS position\nFROM scores ORDER BY score DESC, id;",
+      "inputs": [
+        {
+          "name": "scores",
+          "columns": [
+            "id",
+            "student",
+            "score"
+          ],
+          "values": [
+            [
+              1,
+              "A",
+              90
+            ],
+            [
+              2,
+              "B",
+              90
+            ],
+            [
+              3,
+              "C",
+              80
+            ],
+            [
+              4,
+              "D",
+              70
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "student",
+          "score",
+          "position"
+        ],
+        "values": [
+          [
+            "A",
+            90,
+            1
+          ],
+          [
+            "B",
+            90,
+            1
+          ],
+          [
+            "C",
+            80,
+            2
+          ],
+          [
+            "D",
+            70,
+            3
+          ]
+        ]
+      },
+      "steps": [
+        "Use score alone in the window ordering so equal scores tie.",
+        "The outer ORDER BY includes ID for repeatable presentation."
+      ],
+      "trap": "Adding ID to DENSE_RANK’s ORDER BY would destroy the score ties.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "Compare tie semantics · same input, three different rankings",
+          "columns": [
+            "student",
+            "score",
+            "row_number",
+            "rank_with_gaps",
+            "dense_rank"
+          ],
+          "values": [
+            [
+              "A",
+              90,
+              1,
+              1,
+              1
+            ],
+            [
+              "B",
+              90,
+              2,
+              1,
+              1
+            ],
+            [
+              "C",
+              80,
+              3,
+              3,
+              2
+            ],
+            [
+              "D",
+              70,
+              4,
+              4,
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Consecutive Numbers",
+      "category": "Window functions",
+      "prompt": "Return numbers occurring in at least three consecutive log rows ordered by ID; return each once.",
+      "code": "WITH history AS (\n  SELECT num, LAG(num,1) OVER (ORDER BY id) AS previous,\n         LAG(num,2) OVER (ORDER BY id) AS two_back\n  FROM logs\n)\nSELECT DISTINCT num FROM history\nWHERE num = previous AND num = two_back ORDER BY num;",
+      "postgres": "WITH history AS (\n  SELECT num, LAG(num,1) OVER (ORDER BY id) AS previous,\n         LAG(num,2) OVER (ORDER BY id) AS two_back\n  FROM logs\n)\nSELECT DISTINCT num FROM history\nWHERE num = previous AND num = two_back ORDER BY num;",
+      "inputs": [
+        {
+          "name": "logs",
+          "columns": [
+            "id",
+            "num"
+          ],
+          "values": [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              7,
+              2
+            ],
+            [
+              8,
+              2
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "num"
+        ],
+        "values": [
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ]
+      },
+      "steps": [
+        "LAG retrieves values one and two rows before the current row.",
+        "A current value matching both proves a run of three.",
+        "DISTINCT prevents a longer run from appearing repeatedly."
+      ],
+      "trap": "This contract means consecutive rows in ID order, not necessarily consecutive numeric IDs.",
+      "priority": "Next",
+      "stages": [
+        {
+          "name": "Window state · every current and prior value",
+          "columns": [
+            "id",
+            "num",
+            "previous",
+            "two_back"
+          ],
+          "values": [
+            [
+              1,
+              1,
+              null,
+              null
+            ],
+            [
+              2,
+              1,
+              1,
+              null
+            ],
+            [
+              3,
+              1,
+              1,
+              1
+            ],
+            [
+              4,
+              2,
+              1,
+              1
+            ],
+            [
+              5,
+              1,
+              2,
+              1
+            ],
+            [
+              6,
+              2,
+              1,
+              2
+            ],
+            [
+              7,
+              2,
+              2,
+              1
+            ],
+            [
+              8,
+              2,
+              2,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Rising Temperature",
+      "category": "Dates",
+      "prompt": "Return weather IDs warmer than the previous calendar day; sort IDs.",
+      "code": "SELECT today.id\nFROM weather today\nJOIN weather yesterday ON today.record_date = date(yesterday.record_date, '+1 day')\nWHERE today.temperature > yesterday.temperature\nORDER BY today.id;",
+      "postgres": "SELECT today.id FROM weather today\nJOIN weather yesterday ON today.record_date::date = yesterday.record_date::date + 1\nWHERE today.temperature > yesterday.temperature ORDER BY today.id;",
+      "inputs": [
+        {
+          "name": "weather",
+          "columns": [
+            "id",
+            "record_date",
+            "temperature"
+          ],
+          "values": [
+            [
+              1,
+              "2026-01-01",
+              10
+            ],
+            [
+              2,
+              "2026-01-02",
+              20
+            ],
+            [
+              3,
+              "2026-01-03",
+              15
+            ],
+            [
+              4,
+              "2026-01-04",
+              30
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id"
+        ],
+        "values": [
+          [
+            2
+          ],
+          [
+            4
+          ]
+        ]
+      },
+      "steps": [
+        "Self-join weather on a calendar-day relation.",
+        "Compare temperatures after joining the correct day."
+      ],
+      "trap": "LAG alone compares the previous available row, which may not be the previous calendar day.",
+      "priority": "Next",
+      "stages": []
+    },
+    {
+      "id": 12,
+      "title": "Managers With Five Direct Reports",
+      "category": "Grouping",
+      "prompt": "Return manager IDs and names with at least five direct reports; sort IDs.",
+      "code": "SELECT m.id, m.name\nFROM employees m JOIN employees e ON e.manager_id = m.id\nGROUP BY m.id, m.name HAVING COUNT(*) >= 5 ORDER BY m.id;",
+      "postgres": "SELECT m.id, m.name\nFROM employees m JOIN employees e ON e.manager_id = m.id\nGROUP BY m.id, m.name HAVING COUNT(*) >= 5 ORDER BY m.id;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id",
+          "name"
+        ],
+        "values": [
+          [
+            1,
+            "Ada"
+          ]
+        ]
+      },
+      "steps": [
+        "Join employees to their direct managers.",
+        "Group the joined rows by manager.",
+        "HAVING checks the direct-report count."
+      ],
+      "trap": "Descendants below direct reports are not counted by this join.",
+      "priority": "Next",
+      "stages": []
+    },
+    {
+      "id": 13,
+      "title": "Classes With At Least Five Students",
+      "category": "Grouping",
+      "prompt": "Return classes with at least five distinct students; sort course names.",
+      "code": "SELECT course FROM enrollment\nGROUP BY course HAVING COUNT(DISTINCT student) >= 5 ORDER BY course;",
+      "postgres": "SELECT course FROM enrollment\nGROUP BY course HAVING COUNT(DISTINCT student) >= 5 ORDER BY course;",
+      "inputs": [
+        {
+          "name": "enrollment",
+          "columns": [
+            "student",
+            "course"
+          ],
+          "values": [
+            [
+              "A",
+              "math"
+            ],
+            [
+              "B",
+              "math"
+            ],
+            [
+              "C",
+              "math"
+            ],
+            [
+              "D",
+              "math"
+            ],
+            [
+              "E",
+              "math"
+            ],
+            [
+              "A",
+              "english"
+            ],
+            [
+              "B",
+              "english"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "course"
+        ],
+        "values": [
+          [
+            "math"
+          ]
+        ]
+      },
+      "steps": [
+        "Group enrollments by course.",
+        "Count distinct student identifiers so duplicate enrollment records would not inflate the answer."
+      ],
+      "trap": "COUNT(*) and COUNT(DISTINCT student) differ when duplicate records exist.",
+      "priority": "Tonight",
+      "stages": []
+    },
+    {
+      "id": 14,
+      "title": "Confirmation Rate",
+      "category": "Conditional aggregation",
+      "prompt": "For every signup, return confirmed attempts divided by all attempts, rounded to two decimals; no attempts means 0.",
+      "code": "SELECT s.user_id,\n       ROUND(COALESCE(1.0 * SUM(CASE WHEN c.action = 'confirmed' THEN 1 ELSE 0 END)\n                      / NULLIF(COUNT(c.action),0), 0), 2) AS rate\nFROM signups s LEFT JOIN confirmations c ON c.user_id = s.user_id\nGROUP BY s.user_id ORDER BY s.user_id;",
+      "postgres": "SELECT s.user_id,\n       ROUND(COALESCE(1.0 * SUM(CASE WHEN c.action = 'confirmed' THEN 1 ELSE 0 END)\n                      / NULLIF(COUNT(c.action),0), 0), 2) AS rate\nFROM signups s LEFT JOIN confirmations c ON c.user_id = s.user_id\nGROUP BY s.user_id ORDER BY s.user_id;",
+      "inputs": [
+        {
+          "name": "signups",
+          "columns": [
+            "user_id"
+          ],
+          "values": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ]
+          ]
+        },
+        {
+          "name": "confirmations",
+          "columns": [
+            "user_id",
+            "action"
+          ],
+          "values": [
+            [
+              1,
+              "confirmed"
+            ],
+            [
+              1,
+              "timeout"
+            ],
+            [
+              2,
+              "confirmed"
+            ],
+            [
+              2,
+              "confirmed"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "user_id",
+          "rate"
+        ],
+        "values": [
+          [
+            1,
+            0.5
+          ],
+          [
+            2,
+            1.0
+          ],
+          [
+            3,
+            0.0
+          ]
+        ]
+      },
+      "steps": [
+        "LEFT JOIN includes users with no attempts.",
+        "CASE counts confirmed attempts; COUNT(c.action) ignores the NULL placeholder for no match.",
+        "Use 1.0 to force noninteger division, NULLIF for a zero denominator, then COALESCE."
+      ],
+      "trap": "COUNT(*) would count the unmatched placeholder row. PostgreSQL may need a numeric cast when adapting floating expressions for ROUND.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After LEFT JOIN · note the NULL row for signup 3",
+          "columns": [
+            "user_id",
+            "action"
+          ],
+          "values": [
+            [
+              1,
+              "confirmed"
+            ],
+            [
+              1,
+              "timeout"
+            ],
+            [
+              2,
+              "confirmed"
+            ],
+            [
+              2,
+              "confirmed"
+            ],
+            [
+              3,
+              null
+            ]
+          ]
+        },
+        {
+          "name": "After counting · numerator and denominator",
+          "columns": [
+            "user_id",
+            "confirmed",
+            "attempts"
+          ],
+          "values": [
+            [
+              1,
+              1,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              3,
+              0,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Paid Revenue by Customer",
+      "category": "Grouping",
+      "prompt": "Include every customer. Sum only paid order amounts; customers without paid orders receive zero.",
+      "code": "SELECT c.id, c.name, COALESCE(SUM(o.amount),0) AS revenue\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id AND o.status = 'paid'\nGROUP BY c.id, c.name ORDER BY c.id;",
+      "postgres": "SELECT c.id, c.name, COALESCE(SUM(o.amount),0) AS revenue\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id AND o.status = 'paid'\nGROUP BY c.id, c.name ORDER BY c.id;",
+      "inputs": [
+        {
+          "name": "customers",
+          "columns": [
+            "id",
+            "name"
+          ],
+          "values": [
+            [
+              1,
+              "Ada"
+            ],
+            [
+              2,
+              "Ben"
+            ],
+            [
+              3,
+              "Cara"
+            ],
+            [
+              4,
+              "Zed"
+            ]
+          ]
+        },
+        {
+          "name": "orders",
+          "columns": [
+            "id",
+            "customer_id",
+            "amount",
+            "order_date",
+            "status"
+          ],
+          "values": [
+            [
+              1,
+              1,
+              100,
+              "2026-01-01",
+              "paid"
+            ],
+            [
+              2,
+              1,
+              50,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              3,
+              2,
+              80,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              4,
+              4,
+              20,
+              "2026-01-03",
+              "cancelled"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id",
+          "name",
+          "revenue"
+        ],
+        "values": [
+          [
+            1,
+            "Ada",
+            150
+          ],
+          [
+            2,
+            "Ben",
+            80
+          ],
+          [
+            3,
+            "Cara",
+            0
+          ],
+          [
+            4,
+            "Zed",
+            0
+          ]
+        ]
+      },
+      "steps": [
+        "Put the paid-status restriction inside ON to preserve unmatched customers.",
+        "Group each customer’s paid matches.",
+        "SUM over no matches is NULL; COALESCE converts it to zero."
+      ],
+      "trap": "WHERE o.status = paid would remove zero-revenue customers.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "After paid-only LEFT JOIN · zero-revenue customers remain",
+          "columns": [
+            "id",
+            "name",
+            "paid_order_id",
+            "amount"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              1,
+              100
+            ],
+            [
+              1,
+              "Ada",
+              2,
+              50
+            ],
+            [
+              2,
+              "Ben",
+              3,
+              80
+            ],
+            [
+              3,
+              "Cara",
+              null,
+              null
+            ],
+            [
+              4,
+              "Zed",
+              null,
+              null
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Running Revenue",
+      "category": "Window functions",
+      "prompt": "Aggregate paid revenue by date, then show its cumulative total in chronological order.",
+      "code": "WITH daily AS (\n  SELECT order_date, SUM(amount) AS revenue FROM orders\n  WHERE status = 'paid' GROUP BY order_date\n)\nSELECT order_date, revenue,\n       SUM(revenue) OVER (ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM daily ORDER BY order_date;",
+      "postgres": "WITH daily AS (\n  SELECT order_date, SUM(amount) AS revenue FROM orders\n  WHERE status = 'paid' GROUP BY order_date\n)\nSELECT order_date, revenue,\n       SUM(revenue) OVER (ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM daily ORDER BY order_date;",
+      "inputs": [
+        {
+          "name": "orders",
+          "columns": [
+            "id",
+            "customer_id",
+            "amount",
+            "order_date",
+            "status"
+          ],
+          "values": [
+            [
+              1,
+              1,
+              100,
+              "2026-01-01",
+              "paid"
+            ],
+            [
+              2,
+              1,
+              50,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              3,
+              2,
+              80,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              4,
+              4,
+              20,
+              "2026-01-03",
+              "cancelled"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "order_date",
+          "revenue",
+          "running_total"
+        ],
+        "values": [
+          [
+            "2026-01-01",
+            100,
+            100
+          ],
+          [
+            "2026-01-02",
+            130,
+            230
+          ]
+        ]
+      },
+      "steps": [
+        "First collapse multiple orders on one date into one daily row.",
+        "Then sum the daily values over an explicit growing ROWS frame."
+      ],
+      "trap": "Aggregates collapse rows; window aggregates retain each row. Use an explicit frame when duplicates matter.",
+      "priority": "Tonight",
+      "stages": [
+        {
+          "name": "Daily CTE before applying the cumulative window",
+          "columns": [
+            "order_date",
+            "revenue"
+          ],
+          "values": [
+            [
+              "2026-01-01",
+              100
+            ],
+            [
+              "2026-01-02",
+              130
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Rolling Two-Row Average",
+      "category": "Window functions",
+      "prompt": "For each paid-revenue date, show the average of that row and the preceding revenue row, rounded to two decimals.",
+      "code": "WITH daily AS (\n  SELECT order_date, SUM(amount) AS revenue FROM orders\n  WHERE status = 'paid' GROUP BY order_date\n)\nSELECT order_date,\n       ROUND(AVG(revenue) OVER (ORDER BY order_date ROWS BETWEEN 1 PRECEDING AND CURRENT ROW),2) AS moving_average\nFROM daily ORDER BY order_date;",
+      "postgres": "WITH daily AS (\n  SELECT order_date, SUM(amount) AS revenue FROM orders\n  WHERE status = 'paid' GROUP BY order_date\n)\nSELECT order_date,\n       ROUND(AVG(revenue) OVER (ORDER BY order_date ROWS BETWEEN 1 PRECEDING AND CURRENT ROW),2) AS moving_average\nFROM daily ORDER BY order_date;",
+      "inputs": [
+        {
+          "name": "orders",
+          "columns": [
+            "id",
+            "customer_id",
+            "amount",
+            "order_date",
+            "status"
+          ],
+          "values": [
+            [
+              1,
+              1,
+              100,
+              "2026-01-01",
+              "paid"
+            ],
+            [
+              2,
+              1,
+              50,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              3,
+              2,
+              80,
+              "2026-01-02",
+              "paid"
+            ],
+            [
+              4,
+              4,
+              20,
+              "2026-01-03",
+              "cancelled"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "order_date",
+          "moving_average"
+        ],
+        "values": [
+          [
+            "2026-01-01",
+            100.0
+          ],
+          [
+            "2026-01-02",
+            115.0
+          ]
+        ]
+      },
+      "steps": [
+        "Group daily revenue before applying the window.",
+        "The first row has only itself in its frame.",
+        "The next row averages two revenue rows."
+      ],
+      "trap": "Two rows is not necessarily two calendar days if dates are missing.",
+      "priority": "Next",
+      "stages": [
+        {
+          "name": "Daily rows before evaluating each two-row frame",
+          "columns": [
+            "order_date",
+            "revenue"
+          ],
+          "values": [
+            [
+              "2026-01-01",
+              100
+            ],
+            [
+              "2026-01-02",
+              130
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "title": "First Login per Player",
+      "category": "Grouping",
+      "prompt": "Return each player’s first login date, sorted by player ID.",
+      "code": "SELECT player_id, MIN(event_date) AS first_login\nFROM activity GROUP BY player_id ORDER BY player_id;",
+      "postgres": "SELECT player_id, MIN(event_date) AS first_login\nFROM activity GROUP BY player_id ORDER BY player_id;",
+      "inputs": [
+        {
+          "name": "activity",
+          "columns": [
+            "player_id",
+            "event_date"
+          ],
+          "values": [
+            [
+              1,
+              "2026-01-01"
+            ],
+            [
+              1,
+              "2026-01-02"
+            ],
+            [
+              2,
+              "2026-01-01"
+            ],
+            [
+              2,
+              "2026-01-03"
+            ],
+            [
+              3,
+              "2026-01-05"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "player_id",
+          "first_login"
+        ],
+        "values": [
+          [
+            1,
+            "2026-01-01"
+          ],
+          [
+            2,
+            "2026-01-01"
+          ],
+          [
+            3,
+            "2026-01-05"
+          ]
+        ]
+      },
+      "steps": [
+        "Group by player ID and take the earliest date."
+      ],
+      "trap": "The sample stores dates in ISO YYYY-MM-DD text; its lexical ordering matches calendar ordering.",
+      "priority": "Tonight",
+      "stages": []
+    },
+    {
+      "id": 19,
+      "title": "Next-Day Retention",
+      "category": "Dates",
+      "prompt": "Return the fraction of players who log in on the day immediately after their first login, rounded to two decimals.",
+      "code": "WITH first_login AS (\n  SELECT player_id, MIN(event_date) AS first_day FROM activity GROUP BY player_id\n)\nSELECT ROUND(AVG(CASE WHEN EXISTS (\n  SELECT 1 FROM activity a WHERE a.player_id = f.player_id\n  AND a.event_date = date(f.first_day, '+1 day')\n) THEN 1.0 ELSE 0.0 END),2) AS fraction FROM first_login f;",
+      "postgres": "WITH first_login AS (\n SELECT player_id, MIN(event_date::date) AS first_day FROM activity GROUP BY player_id\n)\nSELECT ROUND(AVG(CASE WHEN EXISTS (\n SELECT 1 FROM activity a WHERE a.player_id = f.player_id\n AND a.event_date::date = f.first_day + 1\n) THEN 1.0 ELSE 0.0 END),2) AS fraction FROM first_login f;",
+      "inputs": [
+        {
+          "name": "activity",
+          "columns": [
+            "player_id",
+            "event_date"
+          ],
+          "values": [
+            [
+              1,
+              "2026-01-01"
+            ],
+            [
+              1,
+              "2026-01-02"
+            ],
+            [
+              2,
+              "2026-01-01"
+            ],
+            [
+              2,
+              "2026-01-03"
+            ],
+            [
+              3,
+              "2026-01-05"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "fraction"
+        ],
+        "values": [
+          [
+            0.33
+          ]
+        ]
+      },
+      "steps": [
+        "Create one first-login row per player.",
+        "EXISTS tests next-calendar-day activity without multiplying the player row.",
+        "Average the one/zero indicators."
+      ],
+      "trap": "Joining all later activity can double count players. EXISTS preserves one vote per player.",
+      "priority": "Next",
+      "stages": []
+    },
+    {
+      "id": 20,
+      "title": "Product Sales Totals",
+      "category": "Grouping",
+      "prompt": "Return total quantity and revenue by product ID, sorted by product ID.",
+      "code": "SELECT product_id, SUM(quantity) AS units, SUM(revenue) AS revenue\nFROM sales GROUP BY product_id ORDER BY product_id;",
+      "postgres": "SELECT product_id, SUM(quantity) AS units, SUM(revenue) AS revenue\nFROM sales GROUP BY product_id ORDER BY product_id;",
+      "inputs": [
+        {
+          "name": "sales",
+          "columns": [
+            "id",
+            "product_id",
+            "quantity",
+            "revenue"
+          ],
+          "values": [
+            [
+              1,
+              101,
+              2,
+              20
+            ],
+            [
+              2,
+              102,
+              1,
+              15
+            ],
+            [
+              3,
+              101,
+              3,
+              30
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "product_id",
+          "units",
+          "revenue"
+        ],
+        "values": [
+          [
+            101,
+            5,
+            50
+          ],
+          [
+            102,
+            1,
+            15
+          ]
+        ]
+      },
+      "steps": [
+        "Group repeated product sales into one row.",
+        "Aggregate quantity and revenue independently."
+      ],
+      "trap": "Do not SUM unit price when the contract asks for revenue.",
+      "priority": "Next",
+      "stages": []
+    },
+    {
+      "id": 21,
+      "title": "Employees Above Department Average",
+      "category": "CTEs",
+      "prompt": "Return non-NULL-salary employees whose salary is above their department’s average, sorted by ID.",
+      "code": "WITH averages AS (\n  SELECT department_id, AVG(salary) AS mean_salary FROM employees GROUP BY department_id\n)\nSELECT e.id,e.name FROM employees e\nJOIN averages a ON a.department_id = e.department_id\nWHERE e.salary > a.mean_salary ORDER BY e.id;",
+      "postgres": "WITH averages AS (\n  SELECT department_id, AVG(salary) AS mean_salary FROM employees GROUP BY department_id\n)\nSELECT e.id,e.name FROM employees e\nJOIN averages a ON a.department_id = e.department_id\nWHERE e.salary > a.mean_salary ORDER BY e.id;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id",
+          "name"
+        ],
+        "values": [
+          [
+            1,
+            "Ada"
+          ],
+          [
+            3,
+            "Cara"
+          ],
+          [
+            4,
+            "Dan"
+          ],
+          [
+            7,
+            "Gia"
+          ]
+        ]
+      },
+      "steps": [
+        "Calculate one average per department; AVG ignores NULL salaries.",
+        "Join each employee to their department statistic.",
+        "Keep only salaries strictly above it."
+      ],
+      "trap": "A correlated subquery or window AVG can express the same logic.",
+      "priority": "Next",
+      "stages": [
+        {
+          "name": "One average per department · NULL salaries excluded by AVG",
+          "columns": [
+            "department_id",
+            "mean_salary"
+          ],
+          "values": [
+            [
+              1,
+              93.33333333333333
+            ],
+            [
+              2,
+              136.66666666666666
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "title": "Find Redundant Email Records",
+      "category": "Ranking",
+      "prompt": "For non-NULL duplicate emails, keep the lowest ID and return the redundant IDs.",
+      "code": "WITH numbered AS (\n  SELECT id,email, ROW_NUMBER() OVER (PARTITION BY email ORDER BY id) AS position\n  FROM contacts WHERE email IS NOT NULL\n)\nSELECT id,email FROM numbered WHERE position > 1 ORDER BY id;",
+      "postgres": "WITH numbered AS (\n  SELECT id,email, ROW_NUMBER() OVER (PARTITION BY email ORDER BY id) AS position\n  FROM contacts WHERE email IS NOT NULL\n)\nSELECT id,email FROM numbered WHERE position > 1 ORDER BY id;",
+      "inputs": [
+        {
+          "name": "contacts",
+          "columns": [
+            "id",
+            "email"
+          ],
+          "values": [
+            [
+              1,
+              "a@example.com"
+            ],
+            [
+              2,
+              "b@example.com"
+            ],
+            [
+              3,
+              "a@example.com"
+            ],
+            [
+              4,
+              null
+            ],
+            [
+              5,
+              null
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "id",
+          "email"
+        ],
+        "values": [
+          [
+            3,
+            "a@example.com"
+          ]
+        ]
+      },
+      "steps": [
+        "Exclude NULL emails because this contract treats missing emails independently.",
+        "ROW_NUMBER picks an unambiguous first record using ID.",
+        "Return later records without deleting anything."
+      ],
+      "trap": "Ranking is a read-only preview here. Real deletion would require a carefully scoped transaction.",
+      "priority": "Next",
+      "stages": [
+        {
+          "name": "Every numbered non-NULL email record before filtering",
+          "columns": [
+            "id",
+            "email",
+            "position"
+          ],
+          "values": [
+            [
+              1,
+              "a@example.com",
+              1
+            ],
+            [
+              2,
+              "b@example.com",
+              1
+            ],
+            [
+              3,
+              "a@example.com",
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "title": "UNION Versus UNION ALL",
+      "category": "Set operations",
+      "prompt": "Combine names from employees ID ≤ 2 and customers ID ≤ 3. Return each distinct name once, alphabetically.",
+      "code": "SELECT name FROM employees WHERE id <= 2\nUNION\nSELECT name FROM customers WHERE id <= 3\nORDER BY name;",
+      "postgres": "SELECT name FROM employees WHERE id <= 2\nUNION\nSELECT name FROM customers WHERE id <= 3\nORDER BY name;",
+      "inputs": [
+        {
+          "name": "employees",
+          "columns": [
+            "id",
+            "name",
+            "salary",
+            "department_id",
+            "manager_id"
+          ],
+          "values": [
+            [
+              1,
+              "Ada",
+              100,
+              1,
+              null
+            ],
+            [
+              2,
+              "Ben",
+              80,
+              1,
+              1
+            ],
+            [
+              3,
+              "Cara",
+              120,
+              1,
+              1
+            ],
+            [
+              4,
+              "Dan",
+              100,
+              1,
+              1
+            ],
+            [
+              5,
+              "Eli",
+              90,
+              1,
+              1
+            ],
+            [
+              6,
+              "Fay",
+              70,
+              1,
+              1
+            ],
+            [
+              7,
+              "Gia",
+              150,
+              2,
+              null
+            ],
+            [
+              8,
+              "Hao",
+              130,
+              2,
+              7
+            ],
+            [
+              9,
+              "Ivy",
+              130,
+              2,
+              7
+            ],
+            [
+              10,
+              "Jay",
+              null,
+              2,
+              7
+            ]
+          ]
+        },
+        {
+          "name": "customers",
+          "columns": [
+            "id",
+            "name"
+          ],
+          "values": [
+            [
+              1,
+              "Ada"
+            ],
+            [
+              2,
+              "Ben"
+            ],
+            [
+              3,
+              "Cara"
+            ],
+            [
+              4,
+              "Zed"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "name"
+        ],
+        "values": [
+          [
+            "Ada"
+          ],
+          [
+            "Ben"
+          ],
+          [
+            "Cara"
+          ]
+        ]
+      },
+      "steps": [
+        "Each SELECT projects a compatible name column.",
+        "UNION removes duplicate complete result rows.",
+        "The final ORDER BY applies to the combined result."
+      ],
+      "trap": "UNION ALL preserves duplicates and often avoids deduplication work.",
+      "priority": "Tonight",
+      "stages": []
+    },
+    {
+      "id": 24,
+      "title": "Consecutive Login Streaks",
+      "category": "Dates",
+      "prompt": "Return runs of at least two consecutive calendar login days per player. Deduplicate same-day logins first.",
+      "code": "WITH days AS (\n  SELECT DISTINCT player_id,event_date FROM activity\n), numbered AS (\n  SELECT player_id,event_date,\n         julianday(event_date) - ROW_NUMBER() OVER (PARTITION BY player_id ORDER BY event_date) AS island\n  FROM days\n)\nSELECT player_id,MIN(event_date) AS start_day,MAX(event_date) AS end_day,COUNT(*) AS length\nFROM numbered GROUP BY player_id,island HAVING COUNT(*) >= 2\nORDER BY player_id,start_day;",
+      "postgres": "WITH days AS (SELECT DISTINCT player_id,event_date::date AS event_date FROM activity),\nnumbered AS (\n SELECT player_id,event_date,\n event_date - (ROW_NUMBER() OVER (PARTITION BY player_id ORDER BY event_date))::integer AS island\n FROM days\n)\nSELECT player_id,MIN(event_date) AS start_day,MAX(event_date) AS end_day,COUNT(*) AS length\nFROM numbered GROUP BY player_id,island HAVING COUNT(*) >= 2 ORDER BY player_id,start_day;",
+      "inputs": [
+        {
+          "name": "activity",
+          "columns": [
+            "player_id",
+            "event_date"
+          ],
+          "values": [
+            [
+              1,
+              "2026-01-01"
+            ],
+            [
+              1,
+              "2026-01-02"
+            ],
+            [
+              2,
+              "2026-01-01"
+            ],
+            [
+              2,
+              "2026-01-03"
+            ],
+            [
+              3,
+              "2026-01-05"
+            ]
+          ]
+        }
+      ],
+      "setup": "CREATE TABLE departments(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO departments VALUES(1,'Engineering'),(2,'Product'),(3,'Operations');\nCREATE TABLE employees(id INTEGER PRIMARY KEY,name TEXT,salary INTEGER,department_id INTEGER,manager_id INTEGER);\nINSERT INTO employees VALUES(1,'Ada',100,1,NULL),(2,'Ben',80,1,1),(3,'Cara',120,1,1),(4,'Dan',100,1,1),(5,'Eli',90,1,1),(6,'Fay',70,1,1),(7,'Gia',150,2,NULL),(8,'Hao',130,2,7),(9,'Ivy',130,2,7),(10,'Jay',NULL,2,7);\nCREATE TABLE customers(id INTEGER PRIMARY KEY,name TEXT);\nINSERT INTO customers VALUES(1,'Ada'),(2,'Ben'),(3,'Cara'),(4,'Zed');\nCREATE TABLE orders(id INTEGER PRIMARY KEY,customer_id INTEGER,amount INTEGER,order_date TEXT,status TEXT);\nINSERT INTO orders VALUES(1,1,100,'2026-01-01','paid'),(2,1,50,'2026-01-02','paid'),(3,2,80,'2026-01-02','paid'),(4,4,20,'2026-01-03','cancelled');\nCREATE TABLE contacts(id INTEGER PRIMARY KEY,email TEXT);\nINSERT INTO contacts VALUES(1,'a@example.com'),(2,'b@example.com'),(3,'a@example.com'),(4,NULL),(5,NULL);\nCREATE TABLE scores(id INTEGER PRIMARY KEY,student TEXT,score INTEGER);\nINSERT INTO scores VALUES(1,'A',90),(2,'B',90),(3,'C',80),(4,'D',70);\nCREATE TABLE logs(id INTEGER PRIMARY KEY,num INTEGER);\nINSERT INTO logs VALUES(1,1),(2,1),(3,1),(4,2),(5,1),(6,2),(7,2),(8,2);\nCREATE TABLE weather(id INTEGER PRIMARY KEY,record_date TEXT,temperature INTEGER);\nINSERT INTO weather VALUES(1,'2026-01-01',10),(2,'2026-01-02',20),(3,'2026-01-03',15),(4,'2026-01-04',30);\nCREATE TABLE enrollment(student TEXT,course TEXT);\nINSERT INTO enrollment VALUES('A','math'),('B','math'),('C','math'),('D','math'),('E','math'),('A','english'),('B','english');\nCREATE TABLE signups(user_id INTEGER PRIMARY KEY);\nINSERT INTO signups VALUES(1),(2),(3);\nCREATE TABLE confirmations(user_id INTEGER,action TEXT);\nINSERT INTO confirmations VALUES(1,'confirmed'),(1,'timeout'),(2,'confirmed'),(2,'confirmed');\nCREATE TABLE activity(player_id INTEGER,event_date TEXT);\nINSERT INTO activity VALUES(1,'2026-01-01'),(1,'2026-01-02'),(2,'2026-01-01'),(2,'2026-01-03'),(3,'2026-01-05');\nCREATE TABLE sales(id INTEGER PRIMARY KEY,product_id INTEGER,quantity INTEGER,revenue INTEGER);\nINSERT INTO sales VALUES(1,101,2,20),(2,102,1,15),(3,101,3,30);\nCREATE TABLE countries(name TEXT,area INTEGER,population INTEGER);\nINSERT INTO countries VALUES('A',4000000,1000000),('B',1000000,30000000),('C',1000000,1000000);\nCREATE TABLE products(id INTEGER PRIMARY KEY,low_fats TEXT,recyclable TEXT);\nINSERT INTO products VALUES(1,'Y','Y'),(2,'Y','N'),(3,'N','Y');",
+      "expected": {
+        "columns": [
+          "player_id",
+          "start_day",
+          "end_day",
+          "length"
+        ],
+        "values": [
+          [
+            1,
+            "2026-01-01",
+            "2026-01-02",
+            2
+          ]
+        ]
+      },
+      "steps": [
+        "Remove repeated login dates before assigning row numbers.",
+        "For consecutive days, calendar ordinal minus row number stays constant.",
+        "Group that island key and retain qualifying runs."
+      ],
+      "trap": "Day ordinals are SQLite julianday here. PostgreSQL uses date arithmetic; the two versions are shown explicitly.",
+      "priority": "Stretch",
+      "stages": []
+    }
+  ],
+  "foundations": [
+    [
+      "Logical query order",
+      "FROM/JOIN → WHERE → GROUP BY → HAVING → window calculations → SELECT → DISTINCT → ORDER BY → LIMIT. This is a reasoning model, not the physical execution plan."
+    ],
+    [
+      "NULL and three-valued logic",
+      "= NULL is not a NULL check. Use IS NULL / IS NOT NULL. WHERE retains only True; False and Unknown are rejected. COUNT(column) ignores NULL; COUNT(*) counts rows."
+    ],
+    [
+      "Anti-joins",
+      "NOT EXISTS avoids the NULL trap in NOT IN. If a NOT IN subquery returns NULL, otherwise-unmatched comparisons can become Unknown."
+    ],
+    [
+      "Join multiplicity",
+      "One-to-many joins multiply rows. Aggregate each many-side first when joining multiple detail tables, or you can multiply sums. DISTINCT is not a universal fix."
+    ],
+    [
+      "LEFT JOIN filters",
+      "A right-side filter in WHERE can discard unmatched rows. Put matching restrictions in ON when you must preserve every left-side row."
+    ],
+    [
+      "Grouping",
+      "Every selected nonaggregate expression must be grouped or supported by the engine’s functional-dependency rules. Write explicit GROUP BY columns for portable clarity."
+    ],
+    [
+      "Ranking",
+      "ROW_NUMBER numbers every row; include a deterministic tie-breaker. RANK leaves gaps after ties. DENSE_RANK has no gaps between distinct levels."
+    ],
+    [
+      "Window frames",
+      "ROWS counts physical rows; RANGE groups peer values under ordering. Explicit ROWS frames avoid surprising cumulative totals on tied sort keys."
+    ],
+    [
+      "Integer division and zero",
+      "Cast or multiply by 1.0 before dividing integer counts. Use NULLIF(denominator,0), then decide whether NULL or zero is the intended result."
+    ],
+    [
+      "Date dialects",
+      "The verified sample queries use SQLite with ISO date text. PostgreSQL references use casts, date + integer or intervals. MySQL date functions differ; confirm the actual assessment dialect."
+    ],
+    [
+      "CTEs and subqueries",
+      "CTEs name intermediate relations and improve readability. Do not assume they always materialise or always improve performance; inspect the plan."
+    ],
+    [
+      "Indexes and EXPLAIN",
+      "Indexes can help filters/joins/order, but add write and storage cost. Composite-key order matters. Use EXPLAIN to inspect access strategy; PostgreSQL EXPLAIN ANALYZE executes the query."
+    ],
+    [
+      "Transactions and constraints",
+      "BEGIN/COMMIT make a unit of work atomic; ROLLBACK undoes it. UNIQUE, PRIMARY KEY, FOREIGN KEY and CHECK express invariants. Isolation level determines allowed concurrent anomalies."
+    ],
+    [
+      "Safe parameterisation",
+      "Pass values as bound parameters via your database driver. Do not interpolate untrusted input into SQL. Parameters represent values, not arbitrary identifiers."
+    ]
+  ],
+  "sources": [
+    [
+      "PostgreSQL window functions",
+      "https://www.postgresql.org/docs/current/tutorial-window.html"
+    ],
+    [
+      "PostgreSQL date functions",
+      "https://www.postgresql.org/docs/current/functions-datetime.html"
+    ],
+    [
+      "SQLite window functions",
+      "https://www.sqlite.org/windowfunctions.html"
+    ]
+  ]
+}
