@@ -4,6 +4,8 @@
 
 PatternPal is an interactive React learning workspace for algorithms, Python and SQL. It combines complete reference solutions, detailed complexity explanations, a problem-to-pattern mapper and visual execution playgrounds.
 
+**Live demo:** [pattern-pal-pathway.lovable.app](https://pattern-pal-pathway.lovable.app/)
+
 **21 patterns · 107 coding examples · 16 Python refreshers · 232 traced input cases · 25 SQL examples**
 
 ![PatternPal's searchable pattern library, with method cards and a focused preparation route](docs/screenshots/pattern-library.jpg)
