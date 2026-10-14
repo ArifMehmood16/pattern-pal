@@ -11,7 +11,8 @@
     "test:examples": "python3 verify_examples.py && python3 verify_study.py && python3 verify_optimised.py",
     "content:generate": "python3 generate_content.py && python3 study_content.py && python3 sql_content.py",
     "predev": "node scripts/prepare-content.mjs",
-    "prebuild": "node scripts/prepare-content.mjs"
+    "prebuild": "node scripts/prepare-content.mjs",
+    "build:dev": "vite build --mode development"
   },
   "dependencies": {
     "react": "^19.2.0",
