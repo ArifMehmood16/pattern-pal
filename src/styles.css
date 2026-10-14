@@ -36,11 +36,11 @@
 
 .footer-note{display:grid;gap:6px;min-width:0}
 .footer-author{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:12px}
-.footer-by{font-size:10px;color:#7d7f88;letter-spacing:.2px}
+.footer-by{font-size:11px;color:#6b6d77;letter-spacing:.2px}
 .footer-by b{font-family:Manrope,sans-serif;font-weight:700;color:var(--ink);letter-spacing:-.2px}
 .footer-links{display:flex;gap:7px}
 .footer-link{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;font-size:9px;font-weight:550;color:#6d707b;transition:border-color .18s,color .18s,transform .18s}
 .footer-link svg{width:12px;height:12px;flex:none;display:block;fill:currentColor}
 .footer-link:hover{border-color:#cfc5e9;color:var(--purple);transform:translateY(-1px)}
-.footer-copy{font-size:8px;letter-spacing:.3px;color:#a3a4ab}
+.footer-copy{font-size:9px;letter-spacing:.3px;color:#8b8d95}
 @media(max-width:760px){footer{gap:14px}.footer-author{justify-content:flex-start;gap:10px}.footer-links{flex-wrap:wrap}}
