@@ -159,7 +159,7 @@ for code in [10 ** 18, 10 ** 18 - 1, 999999999999999999, 123456789987654321, 807
 assert time.perf_counter() - start < 0.1
 
 def case(label, call, value, visible=False, why=''):
-    return dict(label=label, call=call, expected=value, visible=visible, why=why)
+    return dict(label=label, call=call, expected=repr(value), visible=visible, why=why)
 
 echo_cases = [
     case('Example 1', 'solution("codebreakcode")', 4, True, 'Opens and closes with "code".'),
@@ -209,9 +209,9 @@ for label, code, why in [
     mirror_cases.append(case(label, f'solution({code})', mirror_fast(code), False, why))
 
 for item in echo_cases:
-    assert eval(item['call'], {'solution': echo_fast}) == item['expected']
+    assert repr(eval(item['call'], {'solution': echo_fast})) == item['expected']
 for item in mirror_cases:
-    assert eval(item['call'], {'solution': mirror_fast}) == item['expected']
+    assert repr(eval(item['call'], {'solution': mirror_fast})) == item['expected']
 
 challenges = [
     dict(

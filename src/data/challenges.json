@@ -94,119 +94,119 @@
         {
           "label": "Example 1",
           "call": "solution(\"codebreakcode\")",
-          "expected": 4,
+          "expected": "4",
           "visible": true,
           "why": "Opens and closes with \"code\"."
         },
         {
           "label": "Example 2",
           "call": "solution(\"playgroundplay\")",
-          "expected": 4,
+          "expected": "4",
           "visible": true,
           "why": "Opens and closes with \"play\"."
         },
         {
           "label": "Example 3",
           "call": "solution(\"aaaaa\")",
-          "expected": 2,
+          "expected": "2",
           "visible": true,
           "why": "Lengths 3 and 4 match but overlap."
         },
         {
           "label": "Example 4",
           "call": "solution(\"computer\")",
-          "expected": 0,
+          "expected": "0",
           "visible": true,
           "why": "No prefix matches a suffix."
         },
         {
           "label": "Single character",
           "call": "solution(\"z\")",
-          "expected": 0,
+          "expected": "0",
           "visible": false,
           "why": "One character cannot form two separate signatures."
         },
         {
           "label": "Two equal characters",
           "call": "solution(\"aa\")",
-          "expected": 1,
+          "expected": "1",
           "visible": false,
           "why": "Each half is a signature of length 1."
         },
         {
           "label": "Alternating",
           "call": "solution(\"abababab\")",
-          "expected": 4,
+          "expected": "4",
           "visible": false,
           "why": "\"abab\" fits exactly in each half."
         },
         {
           "label": "Alternating, odd",
           "call": "solution(\"ababababa\")",
-          "expected": 3,
+          "expected": "3",
           "visible": false,
           "why": "Border 7 overlaps; fallback gives 3."
         },
         {
           "label": "Overlapping border",
           "call": "solution(\"abaabaaba\")",
-          "expected": 3,
+          "expected": "3",
           "visible": false,
           "why": "Border 6 overlaps; next border is 3."
         },
         {
           "label": "Several valid lengths",
           "call": "solution(\"abcxabcyabcxabc\")",
-          "expected": 7,
+          "expected": "7",
           "visible": false,
           "why": "Borders 7 and 3; 7 fits in half."
         },
         {
           "label": "Case-sensitive",
           "call": "solution(\"Abca\")",
-          "expected": 0,
+          "expected": "0",
           "visible": false,
           "why": "A and a are different characters."
         },
         {
           "label": "No overlap allowed, even",
           "call": "solution(\"aaaaaa\")",
-          "expected": 3,
+          "expected": "3",
           "visible": false,
           "why": "Exactly half: 3."
         },
         {
           "label": "Near-periodic",
           "call": "solution(\"aabaaabaa\")",
-          "expected": 2,
+          "expected": "2",
           "visible": false,
           "why": "Border 5 overlaps; next is 2."
         },
         {
           "label": "Maximum-length input",
           "call": "solution(\"a\" * 100000)",
-          "expected": 50000,
+          "expected": "50000",
           "visible": false,
           "why": "Brute force slows down here; KMP stays linear."
         },
         {
           "label": "Maximum-length input",
           "call": "solution(\"ab\" * 50000)",
-          "expected": 50000,
+          "expected": "50000",
           "visible": false,
           "why": "Brute force slows down here; KMP stays linear."
         },
         {
           "label": "Maximum-length input",
           "call": "solution(\"a\" * 49999 + \"b\" + \"a\" * 50000)",
-          "expected": 49999,
+          "expected": "49999",
           "visible": false,
           "why": "Brute force slows down here; KMP stays linear."
         },
         {
           "label": "Maximum-length input",
           "call": "solution((\"abcab\" * 20000))",
-          "expected": 50000,
+          "expected": "50000",
           "visible": false,
           "why": "Brute force slows down here; KMP stays linear."
         }
@@ -309,140 +309,140 @@
         {
           "label": "Example 1",
           "call": "solution(123)",
-          "expected": 121,
+          "expected": "121",
           "visible": true,
           "why": "121 is 2 away."
         },
         {
           "label": "Example 2",
           "call": "solution(808)",
-          "expected": 818,
+          "expected": "818",
           "visible": true,
           "why": "818 is 10 away, 797 is 11 away."
         },
         {
           "label": "Example 3",
           "call": "solution(1000)",
-          "expected": 999,
+          "expected": "999",
           "visible": true,
           "why": "The answer has fewer digits."
         },
         {
           "label": "Example 4",
           "call": "solution(99)",
-          "expected": 101,
+          "expected": "101",
           "visible": true,
           "why": "99 itself is not allowed."
         },
         {
           "label": "Example 5",
           "call": "solution(121)",
-          "expected": 111,
+          "expected": "111",
           "visible": true,
           "why": "111 and 131 tie; the smaller wins."
         },
         {
           "label": "Single digit",
           "call": "solution(1)",
-          "expected": 0,
+          "expected": "0",
           "visible": false,
           "why": "0 and 2 tie at distance 1; 0 is smaller."
         },
         {
           "label": "Single digit",
           "call": "solution(5)",
-          "expected": 4,
+          "expected": "4",
           "visible": false,
           "why": "4 and 6 tie; 4 wins."
         },
         {
           "label": "Ten",
           "call": "solution(10)",
-          "expected": 9,
+          "expected": "9",
           "visible": false,
           "why": "9 and 11 both 1 away; 9 wins."
         },
         {
           "label": "Power of ten",
           "call": "solution(100)",
-          "expected": 99,
+          "expected": "99",
           "visible": false,
           "why": "99 is 1 away."
         },
         {
           "label": "All nines",
           "call": "solution(999)",
-          "expected": 1001,
+          "expected": "1001",
           "visible": false,
           "why": "1001 is 2 away; 989 is 10 away."
         },
         {
           "label": "More digits",
           "call": "solution(9999)",
-          "expected": 10001,
+          "expected": "10001",
           "visible": false,
           "why": "10001 is 2 away."
         },
         {
           "label": "Fewer digits",
           "call": "solution(10001)",
-          "expected": 9999,
+          "expected": "9999",
           "visible": false,
           "why": "9999 is 2 away, 10101 is 100 away."
         },
         {
           "label": "Already palindrome, even",
           "call": "solution(1221)",
-          "expected": 1111,
+          "expected": "1111",
           "visible": false,
           "why": "1111 and 1331 tie; smaller wins."
         },
         {
           "label": "Middle change, odd",
           "call": "solution(12321)",
-          "expected": 12221,
+          "expected": "12221",
           "visible": false,
           "why": "Change only the middle digit."
         },
         {
           "label": "Prefix carries",
           "call": "solution(1991)",
-          "expected": 2002,
+          "expected": "2002",
           "visible": false,
           "why": "Prefix 19 -> 20 gives 2002."
         },
         {
           "label": "Prefix borrows",
           "call": "solution(2002)",
-          "expected": 1991,
+          "expected": "1991",
           "visible": false,
           "why": "Prefix 20 -> 19 gives 1991."
         },
         {
           "label": "Eleven",
           "call": "solution(11)",
-          "expected": 9,
+          "expected": "9",
           "visible": false,
           "why": "9 is 2 away; 22 is 11 away."
         },
         {
           "label": "Very large",
           "call": "solution(807045053224792883)",
-          "expected": 807045053350540708,
+          "expected": "807045053350540708",
           "visible": false,
           "why": "Only five candidates are ever needed."
         },
         {
           "label": "Very large palindrome",
           "call": "solution(123456789987654321)",
-          "expected": 123456790097654321,
+          "expected": "123456790097654321",
           "visible": false,
           "why": "Must not return itself."
         },
         {
           "label": "Upper bound",
           "call": "solution(1000000000000000000)",
-          "expected": 999999999999999999,
+          "expected": "999999999999999999",
           "visible": false,
           "why": "999...9 (18 nines) is 1 away."
         }
