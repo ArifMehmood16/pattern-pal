@@ -10,6 +10,7 @@ import Resources from './components/Resources.jsx';
 import { useJourney } from './lib/journey.js';
 import { PreparationHub, PythonRefresh, ProblemBank } from './components/Preparation.jsx';
 import SQLExamples from './components/SQLExamples.jsx';
+import { ChallengePage } from './components/Challenges.jsx';
 
 const navigation = [
   ['assessment','◷','Tonight’s plan'], ['python','⌘','Python refresh'], ['problems','≋','Coding problems'],
@@ -48,13 +49,14 @@ function Workspace({patterns}) {
     document.addEventListener('keydown', keydown);
     return () => document.removeEventListener('keydown', keydown);
   }, [focusSearch]);
-  const active = view === 'pattern' ? 'library' : view;
+  const active = view === 'pattern' ? 'library' : view === 'challenge' ? 'problems' : view;
   let page;
   switch (view) {
     case 'pattern': page = <PatternDetail key={id} id={id} initialIndex={Number(index) || 0} patterns={patterns} progress={progress} toggleLearned={toggleLearned} toggleSaved={toggleSaved} notify={notify} studyApi={studyApi}/>; break;
     case 'assessment': page=<PreparationHub patterns={patterns} studyApi={studyApi}/>;break;
     case 'python': page=<PythonRefresh index={id} studyApi={studyApi} notify={notify}/>;break;
     case 'problems': page=<ProblemBank patterns={patterns} studyApi={studyApi}/>;break;
+    case 'challenge': page=<ChallengePage key={id} id={id} studyApi={studyApi} notify={notify}/>;break;
     case 'sql': page=<SQLExamples key={id||'0'} index={id} notify={notify}/>;break;
     case 'finder': page = <ProblemMapper patterns={patterns} draft={draft} setDraft={setDraft} notify={notify} />; break;
     case 'lab': page = <VisualPlayground patterns={patterns} />; break;
