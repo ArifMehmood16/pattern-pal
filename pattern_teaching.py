@@ -24,6 +24,8 @@ DEFINITIONS = {
 }
 
 CONSTRAINTS={
+ 'Repeated Signal Signature':['1 ≤ len(signal) ≤ 100,000; lowercase English letters only.','The opening and closing sequences must not overlap, so a valid length k satisfies 2k ≤ len(signal).','Return 0 when no non-empty sequence qualifies, including single-character input.'],
+ 'Nearest Symmetric Access Code':['1 ≤ code ≤ 10^18; return an integer.','The replacement must differ from code, be non-negative and have no leading zeros (0 itself is allowed).','On equal distance, return the smaller candidate.'],
  'Two Sum':['nums contains integers; target is an integer.','Return two distinct zero-based indices; the practice contract assumes one valid pair.','Duplicate values are allowed. Look up the complement before inserting the current index.'],
  'Longest Unique Substring':['The selected region must be contiguous.','Characters may repeat; counts refer only to the current window.','Empty text returns 0. Do not confuse substring with subsequence.'],
  'Product of Array Except Self':['Values may include zero, negatives and duplicates.','Do not use division. Prefix/suffix products exclude the current element.','This practice function accepts an empty list and returns an empty list.'],

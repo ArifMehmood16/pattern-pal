@@ -6,7 +6,7 @@ for p in patterns:
         scope = {k:v for k,v in vars(practice_fixtures).items() if not k.startswith('__')}
         exec(compile(e['code'], e['title'], 'exec'), scope)
         assert eval(e['check'], scope), f'{p["name"]}: {e["title"]}'
-print('PASS: all 107 Python implementations compile and pass their sample / boundary assertions.')
+print('PASS: all 109 Python implementations compile and pass their sample / boundary assertions.')
 
 # Independent exhaustive checks for the trickier interval and window algorithms.
 import itertools

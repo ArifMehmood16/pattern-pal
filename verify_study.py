@@ -30,5 +30,5 @@ for p in patterns:
             trace=json.loads(Path('public'+case['url']).read_text())
             assert trace['steps'],e['title']
             assert all(1 <= step['line'] <= len(e['code'].splitlines()) for step in trace['steps'])
-print('PASS: all 107 examples have definitions, contracts, input/output cases, code blocks and complete trace files.')
+print('PASS: all 109 examples have definitions, contracts, input/output cases, code blocks and complete trace files.')
 

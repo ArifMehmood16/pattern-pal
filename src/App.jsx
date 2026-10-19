@@ -72,7 +72,7 @@ function Workspace({patterns}) {
     <div className="workspace"><header className="topbar"><div><span className="top-icon">⌘</span>Workspace / {view === 'resources' ? 'Guides & resources' : names[active] || 'Pattern library'}</div><div className="top-right"><span className="python-badge">● Python + SQL</span><button className="key-button" aria-label="Search patterns" onClick={focusSearch}>⌕ <kbd>⌘ K</kbd></button></div></header>
       <main id="main" tabIndex={-1}>{page}</main>
       <footer>
-        <div className="footer-note">Made for the moment a problem starts to make sense.<span>21 methods · 107 coding examples · 25 SQL exercises</span></div>
+        <div className="footer-note">Made for the moment a problem starts to make sense.<span>21 methods · 109 coding examples · 25 SQL exercises</span></div>
         <div className="footer-author">
           <span className="footer-by">Built by <b>Arif Mehmood</b></span>
           <span className="footer-links">
