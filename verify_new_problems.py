@@ -28,7 +28,7 @@ def signature_brute(signal):
 
 hidden_signature = [
     ('planet', 0), ('z', 0), ('zz', 1), ('zzz', 1), ('zzzz', 2), ('zzzzzzz', 3),
-    ('abcab', 2), ('abcabcab', 2), ('abababab', 4), ('ababa', 2), ('aabaaabaa', 3),
+    ('abcab', 2), ('abcabcab', 2), ('abababab', 4), ('ababa', 1), ('aabaaabaa', 2),
     ('kitekitekite', 4), ('mapletreemaple', 5), ('xyxyxyx', 3), ('abcdefgh', 0),
     ('abacaba', 3), ('aaaabaaaa', 4), ('qwertyqwerty', 6),
 ]
