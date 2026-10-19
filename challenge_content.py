@@ -267,8 +267,6 @@ challenges = [
         tests=mirror_cases),
 ]
 
-pack = dict(title='Patterns Behind the Problem',
-            description='Two original stories, two classic techniques. Start from the obvious solution, then find the pattern that makes it fast.',
-            challenges=challenges)
+pack = dict(challenges=challenges)
 Path('src/data/challenges.json').write_text(json.dumps(pack, ensure_ascii=False, indent=2))
 print(f'PASS: challenge pack verified against brute-force oracles ({len(echo_cases)} + {len(mirror_cases)} tests, maximum-length echo inputs in {echo_seconds:.2f}s).')

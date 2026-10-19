@@ -1,6 +1,4 @@
 {
-  "title": "Patterns Behind the Problem",
-  "description": "Two original stories, two classic techniques. Start from the obvious solution, then find the pattern that makes it fast.",
   "challenges": [
     {
       "id": "echo-protocol",

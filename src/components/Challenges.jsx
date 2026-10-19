@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import pack from '../data/challenges.json';
-import { PageHead, CodeBlock } from './ui.jsx';
+import { CodeBlock } from './ui.jsx';
 
-export const challengeCount = pack.challenges.length;
 
 // Builds a plain Python test file the learner pastes under their own solution in their IDE.
 export function buildTestFile(challenge, includeHidden) {
@@ -15,25 +14,23 @@ export function buildTestFile(challenge, includeHidden) {
   return lines.join('\n');
 }
 
-export default function Challenges({ studyApi, notify }) {
+export const challengeRows = pack.challenges;
+
+export function ChallengePage({ id, studyApi, notify }) {
   const { study, setStudy } = studyApi;
+  const c = pack.challenges.find(x => x.id === id);
+  if (!c) return <div className="empty">That problem could not be found. <a href="#problems">Back to coding problems</a></div>;
   const done = Array.isArray(study.challenges) ? study.challenges : [];
-  const toggle = id => setStudy(s => { const list = Array.isArray(s.challenges) ? s.challenges : []; return { ...s, challenges: list.includes(id) ? list.filter(x => x !== id) : [...list, id] }; });
-  return <>
-    <PageHead eyebrow="CHALLENGE PACK" description={pack.description}>{pack.title}<br /><em>Two stories, two techniques.</em></PageHead>
-    <div className="challenge-index">{pack.challenges.map(c => <a key={c.id} href={`#challenge-${c.id}`} className="problem-row" onClick={e => { e.preventDefault(); document.getElementById(`challenge-${c.id}`)?.scrollIntoView({ behavior: 'smooth' }); }}>
-      <span className="pattern-icon">{c.number}</span><div><h3>{c.title}</h3><p>{c.category} · {c.difficulty}</p></div>
-      <span className={`status-pill ${done.includes(c.id) ? 'green' : ''}`}>{done.includes(c.id) ? '✓ Solved' : 'Not yet'}</span></a>)}</div>
-    {pack.challenges.map(c => <Challenge key={c.id} c={c} solved={done.includes(c.id)} toggle={() => toggle(c.id)} notify={notify} />)}
-  </>;
+  const toggle = () => setStudy(s => { const list = Array.isArray(s.challenges) ? s.challenges : []; return { ...s, challenges: list.includes(id) ? list.filter(x => x !== id) : [...list, id] }; });
+  return <><a href="#problems" className="count-label">← Coding problems</a><Challenge c={c} solved={done.includes(id)} toggle={toggle} notify={notify} /></>;
 }
 
 function Challenge({ c, solved, toggle, notify }) {
   const [hints, setHints] = useState(0), [solution, setSolution] = useState(''), [reasoning, setReasoning] = useState(false);
   const copy = async (text, message) => { try { await navigator.clipboard.writeText(text); notify(message); } catch { notify('Copy is blocked here. Select the text and copy it manually.'); } };
   const hidden = c.tests.filter(t => !t.visible);
-  return <section className="challenge panel" id={`challenge-${c.id}`}>
-    <div className="challenge-head"><div><div className="eyebrow">CHALLENGE {c.number} · {c.category}</div><h2>{c.title}</h2></div>
+  return <section className="challenge panel">
+    <div className="challenge-head"><div><div className="eyebrow">{c.category}</div><h2>{c.title}</h2></div>
       <div className="challenge-tags"><span className="status-pill">{c.difficulty}</span><span className="count-label">Target {c.time} time · {c.space} space</span></div></div>
     {c.story.map((p, i) => <p className="challenge-text" key={i}>{p}</p>)}
     <h3>Problem</h3><p className="challenge-text">{c.statement}</p>

@@ -1,3 +1,4 @@
+import { challengeRows } from './Challenges.jsx';
 import { useState } from 'react';
 import plan from '../data/study-plan.json';
 import drills from '../data/python-drills.json';
@@ -35,12 +36,14 @@ export function PythonRefresh({index,studyApi,notify}) {
 }
 
 export function ProblemBank({patterns,studyApi}) {
+  const solvedExtra=Array.isArray(studyApi?.study?.challenges)?studyApi.study.challenges:[];
+  const extra=challengeRows.map(c=>({title:c.title,prompt:c.statement,difficulty:c.difficulty,priority:'Next',time:c.time,href:`#challenge/${c.id}`,key:`challenge:${c.id}`,pattern:{name:c.pattern,icon:c.id==='echo-protocol'?'≡':'⇋'},solved:solvedExtra.includes(c.id)}));
   const [query,setQuery]=useState(''),[priority,setPriority]=useState('Tonight'),[difficulty,setDifficulty]=useState('All');
-  const all=patterns.flatMap(p=>p.examples.map((e,index)=>({...e,pattern:p,index,key:`algorithm:${p.id}:${index}`})));
+  const all=[...patterns.flatMap(p=>p.examples.map((e,index)=>({...e,pattern:p,index,key:`algorithm:${p.id}:${index}`,href:`#pattern/${p.id}/${index}`}))),...extra];
   const matches=all.filter(e=>(priority==='All'||e.priority===priority)&&(difficulty==='All'||e.difficulty===difficulty)&&`${e.title} ${e.pattern.name} ${e.prompt}`.toLowerCase().includes(query.toLowerCase()));
   return <><PageHead eyebrow="THE CODING PROBLEM BANK" description="A curated collection of familiar interview problems and teaching variants. These are preparation examples, not predictions of your assessment.">Learn the idea.<br/><em>Recognise the variation.</em></PageHead>
     <div className="bank-controls"><label className="search-box"><span>⌕</span><input aria-label="Search coding problems" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search a problem or method…"/></label><select value={priority} aria-label="Study priority" onChange={e=>setPriority(e.target.value)}>{['Tonight','Next','Stretch','All'].map(p=><option key={p}>{p}</option>)}</select><select value={difficulty} aria-label="Problem difficulty" onChange={e=>setDifficulty(e.target.value)}>{['All','Easy','Medium','Hard'].map(p=><option key={p}>{p}</option>)}</select><span className="count-label">{matches.length} / {all.length} problems</span></div>
-    <div className="problem-rows">{matches.map(e=><a href={`#pattern/${e.pattern.id}/${e.index}`} className="problem-row" key={e.key}><span className="pattern-icon">{e.pattern.icon}</span><div><h3>{e.title}</h3><p>{e.pattern.name} · {e.time}</p></div><span className={`status-pill ${e.priority==='Tonight'?'green':''}`}>{e.priority}</span><span className="count-label">{e.difficulty}</span><span className="count-label">Open lesson ↗</span></a>)}{!matches.length&&<div className="empty">No matching problems. Try another filter.</div>}</div>
+    <div className="problem-rows">{matches.map(e=><a href={e.href} className="problem-row" key={e.key}><span className="pattern-icon">{e.pattern.icon}</span><div><h3>{e.title}</h3><p>{e.pattern.name} · {e.time}</p></div><span className={`status-pill ${e.priority==='Tonight'||e.solved?'green':''}`}>{e.solved?'✓ Solved':e.priority}</span><span className="count-label">{e.difficulty}</span><span className="count-label">Open lesson ↗</span></a>)}{!matches.length&&<div className="empty">No matching problems. Try another filter.</div>}</div>
   </>;
 }
 
