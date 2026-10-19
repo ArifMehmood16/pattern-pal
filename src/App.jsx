@@ -10,9 +10,10 @@ import Resources from './components/Resources.jsx';
 import { useJourney } from './lib/journey.js';
 import { PreparationHub, PythonRefresh, ProblemBank } from './components/Preparation.jsx';
 import SQLExamples from './components/SQLExamples.jsx';
+import Challenges, { challengeCount } from './components/Challenges.jsx';
 
 const navigation = [
-  ['assessment','◷','Tonight’s plan'], ['python','⌘','Python refresh'], ['problems','≋','Coding problems'],
+  ['assessment','◷','Tonight’s plan'], ['python','⌘','Python refresh'], ['problems','≋','Coding problems'], ['challenges','✦','Challenge pack'],
   ['library', '▦', 'Pattern library'], ['sql','▤','SQL examples'],
   ['finder', '⌕', 'Problem mapper'], ['lab', '◉', 'Visual playground'],
   ['practice', '◇', 'Recognition practice'], ['saved', '♧', 'Saved examples'],
@@ -55,6 +56,7 @@ function Workspace({patterns}) {
     case 'assessment': page=<PreparationHub patterns={patterns} studyApi={studyApi}/>;break;
     case 'python': page=<PythonRefresh index={id} studyApi={studyApi} notify={notify}/>;break;
     case 'problems': page=<ProblemBank patterns={patterns} studyApi={studyApi}/>;break;
+    case 'challenges': page=<Challenges studyApi={studyApi} notify={notify}/>;break;
     case 'sql': page=<SQLExamples key={id||'0'} index={id} notify={notify}/>;break;
     case 'finder': page = <ProblemMapper patterns={patterns} draft={draft} setDraft={setDraft} notify={notify} />; break;
     case 'lab': page = <VisualPlayground patterns={patterns} />; break;
@@ -66,7 +68,7 @@ function Workspace({patterns}) {
   return <>
     <a className="skip-link" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
     <aside className="sidebar"><a className="brand" href="#library"><span className="brand-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g fill="none" stroke="#7561cf" stroke-width="2.5" opacity=".5"><rect x="25" y="5" width="14" height="14" rx="4.5"/><rect x="45" y="5" width="14" height="14" rx="4.5"/><rect x="45" y="25" width="14" height="14" rx="4.5"/><rect x="5" y="45" width="14" height="14" rx="4.5"/><rect x="25" y="45" width="14" height="14" rx="4.5"/></g><g fill="#7561cf"><rect x="8" y="17" width="8" height="11"/><rect x="18" y="28" width="11" height="8"/><rect x="5" y="5" width="16" height="16" rx="5"/><rect x="5" y="25" width="16" height="16" rx="5"/><rect x="25" y="25" width="16" height="16" rx="5"/><rect x="44" y="44" width="16" height="16" rx="5"/><path d="M34 34L51 51" stroke="#7561cf" stroke-width="7"/></g></svg></span><span>pattern<span className="brand-light">pal</span><small>YOUR ALGORITHM SIDEKICK</small></span></a>
-      <div className="sidebar-label">STUDY WORKSPACE</div><nav aria-label="Main navigation">{navigation.map(([route, icon, label]) => <a href={`#${route}`} className={active === route ? 'active' : ''} aria-current={active === route ? 'page' : undefined} key={route}><span>{icon}</span>{label}{route === 'library' && <i>{patterns.length}</i>}{route === 'sql' && <i>25</i>}</a>)}</nav>
+      <div className="sidebar-label">STUDY WORKSPACE</div><nav aria-label="Main navigation">{navigation.map(([route, icon, label]) => <a href={`#${route}`} className={active === route ? 'active' : ''} aria-current={active === route ? 'page' : undefined} key={route}><span>{icon}</span>{label}{route === 'library' && <i>{patterns.length}</i>}{route === 'sql' && <i>25</i>}{route === 'challenges' && <i>{challengeCount}</i>}</a>)}</nav>
       <div className="sidebar-bottom"><div className="journey-head">Your learning journey <span>{progress.learned.length} / {patterns.length}</span></div><div className="progress-track" role="progressbar" aria-label="Methods learned" aria-valuemin={0} aria-valuemax={patterns.length} aria-valuenow={progress.learned.length}><div style={{ width: `${progress.learned.length / patterns.length * 100}%` }} /></div><a href="#resources" className="resource-link">↗ Guides & resources</a><div className="local-note">◌ {storageAvailable ? 'Progress saved on this device' : 'Progress kept for this session'}</div></div>
     </aside>
     <div className="workspace"><header className="topbar"><div><span className="top-icon">⌘</span>Workspace / {view === 'resources' ? 'Guides & resources' : names[active] || 'Pattern library'}</div><div className="top-right"><span className="python-badge">● Python + SQL</span><button className="key-button" aria-label="Search patterns" onClick={focusSearch}>⌕ <kbd>⌘ K</kbd></button></div></header>
