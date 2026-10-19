@@ -9,7 +9,7 @@ const match = (text, signals = []) => engine.match(text, signals, patterns);
 test('all 21 methods have complete examples and valid related methods', () => {
   assert.equal(patterns.length, 21);
   assert.equal(new Set(patterns.map(p => p.id)).size, 21);
-  assert.equal(patterns.reduce((n,p)=>n+p.examples.length,0),107);
+  assert.equal(patterns.reduce((n,p)=>n+p.examples.length,0),109);
   for (const p of patterns) {
     assert(p.examples.length>=5);
     for (const example of p.examples) {

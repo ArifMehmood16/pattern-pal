@@ -62,6 +62,8 @@ def explain_costs(patterns):
       'Greatest Common Divisor':('Euclid’s remainder steps shrink the pair; the number of arithmetic steps is O(log min(|a|,|b|)) for nonzero inputs.','Two running integers plus a remainder are constant in count. Arbitrary-precision operation cost depends on operand bit length.'),
     }
     extra={
+      'Repeated Signal Signature':('Building the prefix function is O(n): matched increases by at most one per character, and each fallback strictly decreases it, so total fallbacks are at most n. The final border chain is also at most n steps.','The prefix-function list stores n integers; everything else is a few counters.'),
+      'Nearest Symmetric Access Code':('There are five candidates. Building each mirrors at most d digits, and comparing them is constant work: O(d) for d decimal digits.','Each candidate string has O(d) digits and only five are kept at once.'),
       'Contains Duplicate':('Each value causes one expected-O(1) set lookup and at most one insertion: O(n).','The set can retain n distinct values.'),
       'Valid Anagram':('Both Counters inspect all n+m characters once. Comparing counts is bounded by the number of distinct characters.','Frequency maps contain at most alphabet-size distinct keys.'),
       'Valid Palindrome':('Both pointers only move inward. Each character is checked/skipped at most a constant number of times: O(n).','The code never builds a filtered or reversed string; only two indices and temporary characters are retained.'),

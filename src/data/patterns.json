@@ -7948,6 +7948,132 @@
         ],
         "timeReason": "Each visited character position is compared across the words until a mismatch. Relevant characters are inspected at most once, bounded by their total input length.",
         "spaceReason": "Only loop indices and a reference to the first word are auxiliary. One final returned prefix slice costs O(prefix length) output storage."
+      },
+      {
+        "title": "Repeated Signal Signature",
+        "difficulty": "Medium",
+        "prompt": "A signal is a string of lowercase letters. Return the length of the longest non-empty sequence that appears both at the start and at the end of the signal, where the two occurrences do not share any position. Return 0 if none exists. Signature: def solution(signal: str) -> int.",
+        "insight": "The KMP prefix function lists every prefix that is also a suffix; walk that chain until the length fits twice without overlap.",
+        "time": "O(n)",
+        "space": "O(n)",
+        "code": "def solution(signal):\n    length = len(signal)\n    if length == 0:\n        return 0\n    # prefix_lengths[i] is the length of the longest proper prefix of\n    # signal[:i + 1] that is also a suffix of it (the KMP prefix function).\n    prefix_lengths = [0] * length\n    matched = 0\n    for index in range(1, length):\n        # On a mismatch, fall back to the next shorter reusable match.\n        while matched > 0 and signal[index] != signal[matched]:\n            matched = prefix_lengths[matched - 1]\n        if signal[index] == signal[matched]:\n            matched += 1\n        prefix_lengths[index] = matched\n    # Start from the longest prefix that is also a suffix of the whole signal.\n    signature = prefix_lengths[length - 1]\n    # The opening and closing copies may not overlap: 2 * signature <= length.\n    while signature > length // 2:\n        signature = prefix_lengths[signature - 1]\n    return signature",
+        "check": "solution(\"orbitstationorbit\")==5 and solution(\"sunflowersun\")==3 and solution(\"abcabcab\")==2 and solution(\"planet\")==0 and solution(\"a\")==0",
+        "teaching": [
+          "Brute force: try every length k from len(signal)//2 down to 1 and compare signal[:k] with signal[-k:]. That costs O(n²) character comparisons in the worst case, for example on a long run of one repeated letter.",
+          "Repeated work: each comparison restarts from scratch. The KMP prefix function records, for every position, the longest prefix that also ends there, reusing earlier matches instead of re-comparing them. Building it is O(n) because matched rises by at most one per character and every fallback lowers it.",
+          "prefix_lengths[n−1] is the longest prefix that is also a suffix. Shorter candidates are exactly the chain prefix_lengths[k−1]. Follow the chain while the candidate is longer than n//2, because longer copies would overlap. Example: \"abcabcab\" has candidates 5 (\"abcab\", overlapping) and 2 (\"ab\"), so the answer is 2. O(n) time, O(n) space."
+        ],
+        "sampleInput": "solution('orbitstationorbit')",
+        "sampleOutput": "5",
+        "starter": "def solution(signal):\n    # Write your solution here.\n    pass",
+        "tests": [
+          "solution('orbitstationorbit') == 5",
+          "solution('sunflowersun') == 3",
+          "solution('abcabcab') == 2",
+          "solution('planet') == 0",
+          "solution('a') == 0"
+        ],
+        "priority": "Next",
+        "blocks": [
+          {
+            "start": 2,
+            "end": 2,
+            "text": "Execute length = len(signal). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 3,
+            "end": 4,
+            "text": "Check length == 0 before taking the branch. Review both branches in the whole code; boundary conditions decide which work is legal."
+          },
+          {
+            "start": 7,
+            "end": 7,
+            "text": "Execute prefix_lengths = [0] * length. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 8,
+            "end": 8,
+            "text": "Execute matched = 0. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 9,
+            "end": 15,
+            "text": "Process range(1, length). The KMP prefix function lists every prefix that is also a suffix; walk that chain until the length fits twice without overlap. The complete trace below shows every executed iteration and each resulting state."
+          },
+          {
+            "start": 17,
+            "end": 17,
+            "text": "Execute signature = prefix_lengths[length - 1]. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "text": "Process signature > length // 2. The KMP prefix function lists every prefix that is also a suffix; walk that chain until the length fits twice without overlap. The complete trace below shows every executed iteration and each resulting state."
+          },
+          {
+            "start": 21,
+            "end": 21,
+            "text": "Return signature. This is the function’s output; it does not print automatically."
+          }
+        ],
+        "explanation": [
+          "Brute force: try every length k from len(signal)//2 down to 1 and compare signal[:k] with signal[-k:]. That costs O(n²) character comparisons in the worst case, for example on a long run of one repeated letter.",
+          "Repeated work: each comparison restarts from scratch. The KMP prefix function records, for every position, the longest prefix that also ends there, reusing earlier matches instead of re-comparing them. Building it is O(n) because matched rises by at most one per character and every fallback lowers it.",
+          "prefix_lengths[n−1] is the longest prefix that is also a suffix. Shorter candidates are exactly the chain prefix_lengths[k−1]. Follow the chain while the candidate is longer than n//2, because longer copies would overlap. Example: \"abcabcab\" has candidates 5 (\"abcab\", overlapping) and 2 (\"ab\"), so the answer is 2. O(n) time, O(n) space."
+        ],
+        "traceUrl": "/traces/trie-5.json",
+        "samples": [
+          {
+            "input": "solution('orbitstationorbit')",
+            "output": "5"
+          },
+          {
+            "input": "solution('sunflowersun')",
+            "output": "3"
+          },
+          {
+            "input": "solution('abcabcab')",
+            "output": "2"
+          },
+          {
+            "input": "solution('planet')",
+            "output": "0"
+          },
+          {
+            "input": "solution('a')",
+            "output": "0"
+          }
+        ],
+        "traces": [
+          {
+            "label": "Example 1",
+            "url": "/traces/trie-5.json"
+          },
+          {
+            "label": "Example 2",
+            "url": "/traces/trie-5-case-1.json"
+          },
+          {
+            "label": "Example 3",
+            "url": "/traces/trie-5-case-2.json"
+          },
+          {
+            "label": "Example 4",
+            "url": "/traces/trie-5-case-3.json"
+          },
+          {
+            "label": "Example 5",
+            "url": "/traces/trie-5-case-4.json"
+          }
+        ],
+        "constraints": [
+          "1 ≤ len(signal) ≤ 100,000; lowercase English letters only.",
+          "The opening and closing sequences must not overlap, so a valid length k satisfies 2k ≤ len(signal).",
+          "Return 0 when no non-empty sequence qualifies, including single-character input."
+        ],
+        "timeReason": "Building the prefix function is O(n): matched increases by at most one per character, and each fallback strictly decreases it, so total fallbacks are at most n. The final border chain is also at most n steps.",
+        "spaceReason": "The prefix-function list stores n integers; everything else is a few counters.",
+        "optimality": "This is a standard efficient approach under the stated contract. Output storage and Python allocation costs are included explicitly above; specialised input bounds may permit different tradeoffs."
       }
     ],
     "definition": "A trie stores characters along shared prefix paths, marking which paths are complete words. String-matching methods reuse partial matches rather than restarting comparisons.",
@@ -8346,6 +8472,162 @@
         ],
         "timeReason": "Integer exponent n is halved every iteration, so there are O(log |n|) multiplications; n=0 returns immediately.",
         "spaceReason": "Only base, exponent and result are retained. Floating-point values occupy fixed storage.",
+        "optimality": "This is a standard efficient approach under the stated contract. Output storage and Python allocation costs are included explicitly above; specialised input bounds may permit different tradeoffs."
+      },
+      {
+        "title": "Nearest Symmetric Access Code",
+        "difficulty": "Medium",
+        "prompt": "A code is symmetric when its decimal digits read the same in both directions. Given a code (1 ≤ code ≤ 10^18), return a different non-negative symmetric integer with the smallest absolute difference from it; on a tie, return the smaller one. Signature: def solution(code: int) -> int.",
+        "insight": "Only a handful of candidates can win: mirror the first half, the first half minus one, the first half plus one, and the two neighbours of the digit-count boundary.",
+        "time": "O(d)",
+        "space": "O(d)",
+        "code": "def mirror(left_half, total_length):\n    # Build a symmetric number whose first half is left_half.\n    if total_length % 2 == 0:\n        return int(left_half + left_half[::-1])\n    return int(left_half + left_half[-2::-1])\n\n\ndef solution(code):\n    digits = str(code)\n    length = len(digits)\n    half_length = (length + 1) // 2\n    first_half = int(digits[:half_length])\n\n    candidates = set()\n    # Digit-count boundaries: 99...9 (one digit shorter) and 10...01 (one longer).\n    candidates.add(10 ** (length - 1) - 1)\n    candidates.add(10 ** length + 1)\n    # Mirror the first half, and the first half moved by one in each direction.\n    for adjusted_half in [first_half - 1, first_half, first_half + 1]:\n        candidates.add(mirror(str(adjusted_half), length))\n\n    # The replacement must be different from the existing code.\n    candidates.discard(code)\n\n    best = None\n    for candidate in candidates:\n        if candidate < 0:\n            continue\n        if best is None:\n            best = candidate\n            continue\n        distance = abs(candidate - code)\n        best_distance = abs(best - code)\n        if distance < best_distance or (distance == best_distance and candidate < best):\n            best = candidate\n    return best",
+        "check": "solution(3472)==3443 and solution(5002)==5005 and solution(777)==767 and solution(10000)==9999 and solution(9999)==10001",
+        "teaching": [
+          "Brute force: step outward, checking code−1, code+1, code−2, code+2, … until a symmetric value appears. Checking the smaller side first resolves ties. Near 10^18 the gap can be about 10^9, so this is far too slow.",
+          "Observation: the closest symmetric number with the same digit count is decided by its first half. Mirroring the first half, or that half minus or plus one, covers the nearest options below and above. When the count of digits changes, the only possibilities are 99…9 and 10…01.",
+          "Collect those five candidates, discard the original code, then pick the smallest absolute difference, preferring the smaller value on a tie. 777 gives 767 and 787, both 10 away, so return 767. Each candidate takes O(d) digit work, so the total is O(d) time and O(d) space."
+        ],
+        "sampleInput": "solution(3472)",
+        "sampleOutput": "3443",
+        "starter": "def mirror(left_half, total_length):\n    # Write your solution here.\n    pass\n\ndef solution(code):\n    # Write your solution here.\n    pass",
+        "tests": [
+          "solution(3472) == 3443",
+          "solution(5002) == 5005",
+          "solution(777) == 767",
+          "solution(10000) == 9999",
+          "solution(9999) == 10001"
+        ],
+        "priority": "Next",
+        "blocks": [
+          {
+            "start": 3,
+            "end": 4,
+            "text": "Check total_length % 2 == 0 before taking the branch. Review both branches in the whole code; boundary conditions decide which work is legal."
+          },
+          {
+            "start": 5,
+            "end": 5,
+            "text": "Return int(left_half + left_half[-2::-1]). This is the function’s output; it does not print automatically."
+          },
+          {
+            "start": 9,
+            "end": 9,
+            "text": "Execute digits = str(code). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 10,
+            "end": 10,
+            "text": "Execute length = len(digits). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 11,
+            "end": 11,
+            "text": "Execute half_length = (length + 1) // 2. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 12,
+            "end": 12,
+            "text": "Execute first_half = int(digits[:half_length]). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 14,
+            "end": 14,
+            "text": "Execute candidates = set(). Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 16,
+            "end": 16,
+            "text": "Execute candidates.add(10 ** (length - 1) - 1). This operation updates the current state before the next block."
+          },
+          {
+            "start": 17,
+            "end": 17,
+            "text": "Execute candidates.add(10 ** length + 1). This operation updates the current state before the next block."
+          },
+          {
+            "start": 19,
+            "end": 20,
+            "text": "Process [first_half - 1, first_half, first_half + 1]. Only a handful of candidates can win: mirror the first half, the first half minus one, the first half plus one, and the two neighbours of the digit-count boundary. The complete trace below shows every executed iteration and each resulting state."
+          },
+          {
+            "start": 23,
+            "end": 23,
+            "text": "Execute candidates.discard(code). This operation updates the current state before the next block."
+          },
+          {
+            "start": 25,
+            "end": 25,
+            "text": "Execute best = None. Python evaluates the right-hand expression before storing its result; tuple assignments use the previous values for every right-hand component."
+          },
+          {
+            "start": 26,
+            "end": 35,
+            "text": "Process candidates. Only a handful of candidates can win: mirror the first half, the first half minus one, the first half plus one, and the two neighbours of the digit-count boundary. The complete trace below shows every executed iteration and each resulting state."
+          },
+          {
+            "start": 36,
+            "end": 36,
+            "text": "Return best. This is the function’s output; it does not print automatically."
+          }
+        ],
+        "explanation": [
+          "Brute force: step outward, checking code−1, code+1, code−2, code+2, … until a symmetric value appears. Checking the smaller side first resolves ties. Near 10^18 the gap can be about 10^9, so this is far too slow.",
+          "Observation: the closest symmetric number with the same digit count is decided by its first half. Mirroring the first half, or that half minus or plus one, covers the nearest options below and above. When the count of digits changes, the only possibilities are 99…9 and 10…01.",
+          "Collect those five candidates, discard the original code, then pick the smallest absolute difference, preferring the smaller value on a tie. 777 gives 767 and 787, both 10 away, so return 767. Each candidate takes O(d) digit work, so the total is O(d) time and O(d) space."
+        ],
+        "traceUrl": "/traces/bits-5.json",
+        "samples": [
+          {
+            "input": "solution(3472)",
+            "output": "3443"
+          },
+          {
+            "input": "solution(5002)",
+            "output": "5005"
+          },
+          {
+            "input": "solution(777)",
+            "output": "767"
+          },
+          {
+            "input": "solution(10000)",
+            "output": "9999"
+          },
+          {
+            "input": "solution(9999)",
+            "output": "10001"
+          }
+        ],
+        "traces": [
+          {
+            "label": "Example 1",
+            "url": "/traces/bits-5.json"
+          },
+          {
+            "label": "Example 2",
+            "url": "/traces/bits-5-case-1.json"
+          },
+          {
+            "label": "Example 3",
+            "url": "/traces/bits-5-case-2.json"
+          },
+          {
+            "label": "Example 4",
+            "url": "/traces/bits-5-case-3.json"
+          },
+          {
+            "label": "Example 5",
+            "url": "/traces/bits-5-case-4.json"
+          }
+        ],
+        "constraints": [
+          "1 ≤ code ≤ 10^18; return an integer.",
+          "The replacement must differ from code, be non-negative and have no leading zeros (0 itself is allowed).",
+          "On equal distance, return the smaller candidate."
+        ],
+        "timeReason": "There are five candidates. Building each mirrors at most d digits, and comparing them is constant work: O(d) for d decimal digits.",
+        "spaceReason": "Each candidate string has O(d) digits and only five are kept at once.",
         "optimality": "This is a standard efficient approach under the stated contract. Output storage and Python allocation costs are included explicitly above; specialised input bounds may permit different tradeoffs."
       }
     ],

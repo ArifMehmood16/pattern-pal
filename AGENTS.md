@@ -30,11 +30,11 @@ Live code editors, Python or SQL execution, a Run button, mock assessments, mist
 
 Preserve the supplied data. Do not shorten it, substitute placeholders, or invent traces.
 
-- `src/data/patterns.json`: 21 methods and 107 coding examples
+- `src/data/patterns.json`: 21 methods and 109 coding examples
 - `src/data/python-drills.json`: 16 Python refresher examples
 - `src/data/sql-lessons.json`: 25 SQL examples
 - `src/data/study-plan.json`: study route and pitfalls
-- `public/traces/`: 232 recorded input-case traces
+- `public/traces/`: 242 recorded input-case traces
 - `src/lib/engine.js`: local problem mapper and recognition questions
 
 Python files at the repo root regenerate and verify that content. They are not part of the website runtime. Change learner-facing content in the generators, then regenerate, rather than hand-editing JSON or traces.

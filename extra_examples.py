@@ -532,3 +532,61 @@ def clone_graph(graph, start):
                         neighbors += board[nr][nc]
             following[r][c] = int(neighbors == 3 or (board[r][c] == 1 and neighbors == 2))
     return following''', 'game_of_life([[0,1,0],[0,1,0],[0,1,0]])==[[0,0,0],[1,1,1],[0,0,0]]', ['Allocate independent next-state rows while retaining the original board.','For each cell count its eight in-bounds neighbors, excluding itself.','Write only into the next-state matrix. Reading and writing the same generation would violate simultaneous update semantics.'])
+
+    A('trie','Repeated Signal Signature','Medium','A signal is a string of lowercase letters. Return the length of the longest non-empty sequence that appears both at the start and at the end of the signal, where the two occurrences do not share any position. Return 0 if none exists. Signature: def solution(signal: str) -> int.','The KMP prefix function lists every prefix that is also a suffix; walk that chain until the length fits twice without overlap.','O(n)','O(n)', '''def solution(signal):
+    length = len(signal)
+    if length == 0:
+        return 0
+    # prefix_lengths[i] is the length of the longest proper prefix of
+    # signal[:i + 1] that is also a suffix of it (the KMP prefix function).
+    prefix_lengths = [0] * length
+    matched = 0
+    for index in range(1, length):
+        # On a mismatch, fall back to the next shorter reusable match.
+        while matched > 0 and signal[index] != signal[matched]:
+            matched = prefix_lengths[matched - 1]
+        if signal[index] == signal[matched]:
+            matched += 1
+        prefix_lengths[index] = matched
+    # Start from the longest prefix that is also a suffix of the whole signal.
+    signature = prefix_lengths[length - 1]
+    # The opening and closing copies may not overlap: 2 * signature <= length.
+    while signature > length // 2:
+        signature = prefix_lengths[signature - 1]
+    return signature''', 'solution("orbitstationorbit")==5 and solution("sunflowersun")==3 and solution("abcabcab")==2 and solution("planet")==0 and solution("a")==0', ['Brute force: try every length k from len(signal)//2 down to 1 and compare signal[:k] with signal[-k:]. That costs O(n²) character comparisons in the worst case, for example on a long run of one repeated letter.','Repeated work: each comparison restarts from scratch. The KMP prefix function records, for every position, the longest prefix that also ends there, reusing earlier matches instead of re-comparing them. Building it is O(n) because matched rises by at most one per character and every fallback lowers it.','prefix_lengths[n−1] is the longest prefix that is also a suffix. Shorter candidates are exactly the chain prefix_lengths[k−1]. Follow the chain while the candidate is longer than n//2, because longer copies would overlap. Example: "abcabcab" has candidates 5 ("abcab", overlapping) and 2 ("ab"), so the answer is 2. O(n) time, O(n) space.'])
+    A('bits','Nearest Symmetric Access Code','Medium','A code is symmetric when its decimal digits read the same in both directions. Given a code (1 ≤ code ≤ 10^18), return a different non-negative symmetric integer with the smallest absolute difference from it; on a tie, return the smaller one. Signature: def solution(code: int) -> int.','Only a handful of candidates can win: mirror the first half, the first half minus one, the first half plus one, and the two neighbours of the digit-count boundary.','O(d)','O(d)', '''def mirror(left_half, total_length):
+    # Build a symmetric number whose first half is left_half.
+    if total_length % 2 == 0:
+        return int(left_half + left_half[::-1])
+    return int(left_half + left_half[-2::-1])
+
+
+def solution(code):
+    digits = str(code)
+    length = len(digits)
+    half_length = (length + 1) // 2
+    first_half = int(digits[:half_length])
+
+    candidates = set()
+    # Digit-count boundaries: 99...9 (one digit shorter) and 10...01 (one longer).
+    candidates.add(10 ** (length - 1) - 1)
+    candidates.add(10 ** length + 1)
+    # Mirror the first half, and the first half moved by one in each direction.
+    for adjusted_half in [first_half - 1, first_half, first_half + 1]:
+        candidates.add(mirror(str(adjusted_half), length))
+
+    # The replacement must be different from the existing code.
+    candidates.discard(code)
+
+    best = None
+    for candidate in candidates:
+        if candidate < 0:
+            continue
+        if best is None:
+            best = candidate
+            continue
+        distance = abs(candidate - code)
+        best_distance = abs(best - code)
+        if distance < best_distance or (distance == best_distance and candidate < best):
+            best = candidate
+    return best''', 'solution(3472)==3443 and solution(5002)==5005 and solution(777)==767 and solution(10000)==9999 and solution(9999)==10001', ['Brute force: step outward, checking code−1, code+1, code−2, code+2, … until a symmetric value appears. Checking the smaller side first resolves ties. Near 10^18 the gap can be about 10^9, so this is far too slow.','Observation: the closest symmetric number with the same digit count is decided by its first half. Mirroring the first half, or that half minus or plus one, covers the nearest options below and above. When the count of digits changes, the only possibilities are 99…9 and 10…01.','Collect those five candidates, discard the original code, then pick the smallest absolute difference, preferring the smaller value on a tie. 777 gives 767 and 787, both 10 away, so return 767. Each candidate takes O(d) digit work, so the total is O(d) time and O(d) space.'])

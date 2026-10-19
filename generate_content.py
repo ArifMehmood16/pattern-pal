@@ -776,7 +776,7 @@ E(p,'Greatest Common Divisor','Easy','Compute the nonnegative gcd of two integer
 
 from extra_examples import expand
 expand(patterns, E, P)
-assert len(patterns) == 21 and sum(len(p['examples']) for p in patterns) == 107
+assert len(patterns) == 21 and sum(len(p['examples']) for p in patterns) == 109
 from optimise_examples import optimise
 optimise(patterns)
 node_samples = {
