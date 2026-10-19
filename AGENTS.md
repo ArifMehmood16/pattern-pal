@@ -70,7 +70,3 @@ Warm off-white workspace `#f6f5f0`, cards `#fffefa`, navy text `#25293a`, lilac 
 ## Checks
 
 `npm test` checks content, the mapper, and the study plan. `npm run test:examples` needs Python 3. After a content change, run `node scripts/prepare-content.mjs` before expecting the dev server to serve new data.
-
-## Extra problems
-
-`challenge_content.py` generates `src/data/challenges.json` (verified against brute-force oracles). These problems appear as normal rows in the Coding problems bank and open at `#challenge/:id`; keep them inside the bank, not a separate section. Expected values are stored as Python-literal text because JS loses precision on large integers.
